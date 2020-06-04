@@ -12,3 +12,8 @@ tmp
 .sass-cache
 *.swp
 *.gem
+
+# the following env files can be used to supply environment variables
+# they are listed in ascending hierarchical order
+# See https://github.com/bkeepers/dotenv for more information
+.env
