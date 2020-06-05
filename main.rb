@@ -15,7 +15,7 @@ bot.message(with_text: 'p!ping') do |event|
 end
 
 bot.message(with_text: 'p!help') do |event|
-  event.respond 'This is the Pokecord bot! It is currently underdevelopment, so not all commands may function properly. Check back soon for updates!'
+  event.respond 'This is the Pokecord bot! It is currently under development, so not all commands may function properly. Check back soon for updates!'
 end
 
 bot.message(with_text: 'p!bye') do |event|
@@ -62,7 +62,7 @@ end
   appeal
 }.each do |command|
   bot.message(with_text: "p!#{command}") do |event|
-    event.respond "The #{command} has not been implemented yet. Check back soon for new features and updates!"
+    event.respond "The #{command} command has not been implemented yet. Check back soon for new features and updates!"
   end
 end
 
