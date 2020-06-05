@@ -9,7 +9,7 @@ bot = Discordrb::Commands::CommandBot.new(
 )
 
 if ENV['DEVELOPER_ID']
-  bot.set_user_permission(ENV['DEVELOPER_ID'], 5)
+  bot.set_user_permission(ENV['DEVELOPER_ID'].to_i, 5)
 end
 
 bot.command :start do |event|
