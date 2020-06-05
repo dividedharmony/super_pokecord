@@ -8,8 +8,16 @@ bot = Discordrb::Commands::CommandBot.new(
   prefix: 'p!'
 )
 
-bot.command :plus do |event, x, y|
-  "The sum of #{x} and #{y} is #{x.to_i + y.to_i}"
+bot.command :start do |event|
+  starter_file = File.expand_path('assets/starters.png', File.dirname(__FILE__))
+  event.send_file(File.open(starter_file, 'r'), caption: 'Pick your pokemon')
+  "You can select one with `p!start [pokemon name]` (not implemented)"
+end
+
+bot.command :wild do |event|
+  random_pokedex_num = (rand(809) + 1).to_s.rjust(3, '0')
+  pic_file = File.expand_path("pokemon_info/images/#{random_pokedex_num}.png", File.dirname(__FILE__))
+  event.send_file(File.open(pic_file, 'r'), caption: 'A wild Pokemon appeared! You can try to catch it with `p!catch` (not implemented)')
 end
 
 %w{
