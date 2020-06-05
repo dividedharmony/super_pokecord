@@ -7,3 +7,5 @@ gem 'discordrb'
 # database
 gem 'rom'
 gem 'rom-sql'
+gem 'pg'
+gem 'sequel_pg'
