@@ -33,46 +33,4 @@ bot.message(with_text: 'p!wild') do |event|
   event.send_file(File.open(pic_file, 'r'), caption: 'A wild Pokemon appeared! You can try to catch it with `p!catch` (not implemented)')
 end
 
-%w{
-  pick
-  pokemon
-  order
-  hint
-  info
-  catch
-  pokedex
-  nickname
-  release
-  mega
-  shop
-  fav
-  addfav
-  removefav
-  select
-  moves
-  learn
-  replace
-  duel
-  accept
-  use
-  confirm
-  balance
-  bal
-  market
-  trade
-  p
-  cancel
-  daily
-  silence
-  redeem
-  invite
-  server
-  patreon
-  appeal
-}.each do |command|
-  bot.message(with_text: "p!#{command}") do |event|
-    event.respond "The #{command} command has not been implemented yet. Check back soon for new features and updates!"
-  end
-end
-
 bot.run
