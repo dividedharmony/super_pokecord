@@ -22,8 +22,12 @@ bot.message(with_text: 'p!bye') do |event|
   event.respond 'Shutting down now'
 end
 
+bot.message(with_text: 'p!start') do |event|
+  starter_file = File.expand_path('assets/starters.png', File.dirname(__FILE__))
+  event.send_file(File.open(starter_file, 'r'), caption: 'Pick your pokemon')
+end
+
 %w{
-  start
   pick
   pokemon
   order
