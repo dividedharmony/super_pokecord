@@ -9,3 +9,5 @@ gem 'rom'
 gem 'rom-sql'
 gem 'pg'
 gem 'sequel_pg'
+
+gem 'rake'

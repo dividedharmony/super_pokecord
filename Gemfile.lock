@@ -55,6 +55,7 @@ GEM
     opus-ruby (1.0.1)
       ffi
     pg (1.2.3)
+    rake (13.0.1)
     rbnacl (3.4.0)
       ffi
     rest-client (2.1.0)
@@ -110,6 +111,7 @@ DEPENDENCIES
   discordrb
   dotenv
   pg
+  rake
   rom
   rom-sql
   sequel_pg
