@@ -6,6 +6,7 @@
 
 # Ignore messy local files
 tmp
+.bundle/
 .idea/
 .DS_Store
 .powenv
