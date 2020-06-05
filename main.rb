@@ -27,7 +27,6 @@ end
   pick
   pokemon
   order
-  catch
   hint
   info
   catch
