@@ -14,7 +14,7 @@ module Db
       end
 
       def container
-        ROM::Container.new(:sql, connection_string, options)
+        ROM.container(config)
       end
 
       private
