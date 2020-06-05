@@ -8,7 +8,7 @@ bot = Discordrb::Commands::CommandBot.new(
   prefix: 'p!'
 )
 
-if ENV['DEVELOPER_ID'].present?
+if ENV['DEVELOPER_ID']
   bot.set_user_permission(ENV['DEVELOPER_ID'], 5)
 end
 
