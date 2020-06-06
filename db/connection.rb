@@ -4,6 +4,8 @@ require 'dotenv/load'
 require_relative '../environment.rb'
 require 'rom-sql'
 
+require_relative '../lib/persistence/relations/users'
+
 module Db
   class Connection
     class UnknownEnvironmentError < StandardError; end
@@ -11,6 +13,14 @@ module Db
     class << self
       def config
         ROM::Configuration.new(:sql, connection_string, options)
+      end
+
+      def registered_container
+        @_registered_container ||= begin
+          configuration = config
+          configuration.register_relation(Persistence::Relations::Users)
+          ROM.container(configuration)
+        end
       end
 
       def container
@@ -22,7 +32,7 @@ module Db
       def options
         {
           adapter: :postgres,
-          encoding: 'UTF8'
+          encoding: 'UTF8',
         }
       end
 
