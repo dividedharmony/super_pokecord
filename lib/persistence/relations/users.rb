@@ -5,7 +5,12 @@ require 'rom-sql'
 module Persistence
   module Relations
     class Users < ROM::Relation[:sql]
-      schema(:users, infer: true)
+      schema(:users, infer: true) do
+        associations do
+          has_many :spawned_pokemons
+        end
+      end
+
       auto_struct(true)
 
       def listing

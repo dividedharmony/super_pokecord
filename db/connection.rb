@@ -6,6 +6,7 @@ require 'rom-sql'
 
 require_relative '../lib/persistence/relations/users'
 require_relative '../lib/persistence/relations/pokemons'
+require_relative '../lib/persistence/relations/spawned_pokemons'
 
 module Db
   class Connection
@@ -19,8 +20,11 @@ module Db
       def registered_container
         @_registered_container ||= begin
           configuration = config
-          configuration.register_relation(Persistence::Relations::Users)
-          configuration.register_relation(Persistence::Relations::Pokemons)
+          configuration.register_relation(
+            Persistence::Relations::Users,
+            Persistence::Relations::Pokemons,
+            Persistence::Relations::SpawnedPokemons
+          )
           ROM.container(configuration)
         end
       end
