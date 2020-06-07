@@ -3,6 +3,8 @@
 require 'dotenv/load'
 require 'discordrb'
 
+require_relative './lib/pokecord/wild_pokemon'
+
 bot = Discordrb::Commands::CommandBot.new(
   token: ENV["DISCORD_TOKEN"],
   prefix: 'p!'
@@ -19,9 +21,9 @@ bot.command :start do |event|
 end
 
 bot.command(:wild, permission_level: 2) do |event|
-  random_pokedex_num = (rand(809) + 1).to_s.rjust(3, '0')
-  pic_file = File.expand_path("pokemon_info/images/#{random_pokedex_num}.png", File.dirname(__FILE__))
-  event.send_file(File.open(pic_file, 'r'), caption: 'A wild Pokemon appeared! You can try to catch it with `p!catch` (not implemented)')
+  wild_pokemon = Pokecord::WildPokemon.new
+  wild_pokemon.spawn!
+  event.send_file(File.open(wild_pokemon.pic_file, 'r'), caption: "A wild Pokemon appeared! You can try to catch it with `p!catch` (not implemented)")
 end
 
 %w{
