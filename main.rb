@@ -3,19 +3,18 @@
 require 'dotenv/load'
 require 'discordrb'
 
+require_relative './lib/pokecord/spawn_rate'
 require_relative './lib/pokecord/wild_pokemon'
 
 bot = Discordrb::Bot.new(token: ENV["DISCORD_TOKEN"])
 
 poke_channels = (ENV["POKECORD_CHANNELS"] || "").split(',')
-poke_steps = 0
-poke_requirement = rand(11) + 5
+spawn_rate = Pokecord::SpawnRate.new(5, 15)
 
 bot.message(containing: not!("p!"), in: poke_channels) do |event|
-  poke_steps += 1
-  if poke_steps >= poke_requirement
-    poke_steps = 0
-    poke_requirement = rand(11) + 5
+  spawn_rate.step!
+  if spawn_rate.should_spawn?
+    spawn_rate.reset!
     # spawn a wild pokemon
     wild_pokemon = Pokecord::WildPokemon.new
     wild_pokemon.spawn!
