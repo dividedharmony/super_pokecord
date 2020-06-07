@@ -4,6 +4,7 @@ require 'dotenv/load'
 require 'discordrb'
 
 require_relative './lib/pokecord/wild_pokemon'
+require_relative './lib/pokecord/commands/catch'
 
 bot = Discordrb::Commands::CommandBot.new(
   token: ENV["DISCORD_TOKEN"],
@@ -26,13 +27,24 @@ bot.command(:wild, permission_level: 2) do |event|
   event.send_file(File.open(wild_pokemon.pic_file, 'r'), caption: "A wild Pokemon appeared! You can try to catch it with `p!catch` (not implemented)")
 end
 
+bot.command(:catch) do |event, name_guess|
+  catch_cmd = Pokecord::Commands::Catch.new(event, name_guess)
+  if catch_cmd.can_catch?
+    if catch_cmd.name_correct?
+      catch_cmd.catch!
+      "Congratulations, #{event.user.mention}! You have successfully caught this Pokemon!"
+    else
+      'That is not the right Pokemon!'
+    end
+  end
+end
+
 %w{
   pick
   pokemon
   order
   hint
   info
-  catch
   pokedex
   shop
   nickname
