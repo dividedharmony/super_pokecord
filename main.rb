@@ -9,7 +9,7 @@ bot = Discordrb::Bot.new(token: ENV["DISCORD_TOKEN"])
 
 poke_channels = (ENV["POKECORD_CHANNELS"] || "").split(',')
 poke_steps = 0
-poke_requirement = rand(35) + 10
+poke_requirement = rand(11) + 10
 
 bot.message(containing: not!("p!"), in: poke_channels) do |event|
   poke_steps += 1
