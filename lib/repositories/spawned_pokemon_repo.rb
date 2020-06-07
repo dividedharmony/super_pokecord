@@ -12,5 +12,12 @@ module Repositories
       last_pokemon = spawned_pokemons.combine(:pokemon).order { id.desc }.first
       last_pokemon.caught_at.nil? ? last_pokemon : nil
     end
+
+    # returns maximum catch_number
+    # within the scope of a given user
+    # (returns 0 if no pokemon have been caught by that user)
+    def max_catch_number(user)
+      spawned_pokemons.where(user_id: user.id).max(:catch_number) || 0
+    end
   end
 end

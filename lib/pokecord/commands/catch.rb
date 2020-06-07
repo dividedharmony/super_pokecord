@@ -51,8 +51,7 @@ module Pokecord
       end
 
       def catch_number
-        latest_number = spawn_repo.spawned_pokemons.where(user_id: user.id).max(:catch_number)
-        latest_number.nil? ? 1 : latest_number + 1
+        spawn_repo.max_catch_number(user) + 1
       end
     end
   end
