@@ -56,7 +56,7 @@ bot.command(:pokemon) do |event, page_num|
       "**#{poke.name}:** Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
     end.join("\n")
     embed.footer = Discordrb::Webhooks::EmbedFooter.new(
-      text: 'Displaying xxx out of xxx'
+      text: "Displaying page #{page_number} of #{list_cmd.total_pages}"
     )
   end
 end

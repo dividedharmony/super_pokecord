@@ -31,6 +31,10 @@ module Pokecord
           to_a
       end
 
+      def total_pages
+        (spawn_repo.where(user_id: user.id).count.to_f / PER_PAGE).ceil
+      end
+
       private
 
       attr_reader :page_num, :user_repo, :spawn_repo, :user
