@@ -1,10 +1,13 @@
-# main.rb
+# frozen_string_literal: true
 
 require 'dotenv/load'
 require 'discordrb'
 
 require_relative './lib/pokecord/wild_pokemon'
 require_relative './lib/pokecord/commands/catch'
+require_relative './lib/pokecord/commands/list_pokemons'
+
+EMBED_COLOR = '#34d8eb'
 
 bot = Discordrb::Commands::CommandBot.new(
   token: ENV["DISCORD_TOKEN"],
@@ -39,9 +42,27 @@ bot.command(:catch) do |event, name_guess|
   end
 end
 
+bot.command(:pokemon) do |event, page_num|
+  page_number = page_num || 0
+  list_cmd = Pokecord::Commands::ListPokemons.new(
+    event.user.id.to_s,
+    page_number
+  )
+  event.channel.send_embed do |embed|
+    embed.color = EMBED_COLOR
+    embed.title = "Pokemon caught by #{event.user.mention}"
+    embed.description = list_cmd.to_a.map do |spawn|
+      poke = spawn.pokemon
+      "**#{poke.name}:** Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
+    end.join("\n")
+    embed.footer = Discordrb::Webhooks::EmbedFooter.new(
+      text: 'Displaying xxx out of xxx'
+    )
+  end
+end
+
 %w{
   pick
-  pokemon
   order
   hint
   info
@@ -78,6 +99,25 @@ end
 }.each do |cmd|
   bot.command cmd.to_sym do |event|
     "The #{cmd} command has not been implemented yet. Check back soon for new features and updates!"
+  end
+end
+
+bot.command(:emily, permission_level: 2) do |event, page_num|
+  page_number = page_num || 0
+  list_cmd = Pokecord::Commands::ListPokemons.new(
+    ENV['EMILY_ID'],
+    page_number
+  )
+  event.channel.send_embed do |embed|
+    embed.color = EMBED_COLOR
+    embed.title = "Pokemon caught by Emily"
+    embed.description = list_cmd.to_a.map do |spawn|
+      poke = spawn.pokemon
+      "**#{poke.name}:** Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
+    end.join("\n")
+    embed.footer = Discordrb::Webhooks::EmbedFooter.new(
+      text: 'Displaying xxx out of xxx'
+    )
   end
 end
 
