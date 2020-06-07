@@ -30,7 +30,8 @@ module Pokecord
       def catch!
         update_command.call(
           user_id: user.id,
-          caught_at: Time.now
+          caught_at: Time.now,
+          catch_number: catch_number
         )
       end
 
@@ -47,6 +48,11 @@ module Pokecord
 
       def update_command
         spawn_repo.spawned_pokemons.by_pk(catchable_spawned_pokemon.id).command(:update)
+      end
+
+      def catch_number
+        latest_number = spawn_repo.spawned_pokemons.where(user_id: user.id).max(:catch_number)
+        latest_number.nil? ? 1 : latest_number + 1
       end
     end
   end
