@@ -49,16 +49,21 @@ bot.command(:pokemon) do |event, given_page_num|
     event.user.id.to_s,
     actual_page_num
   )
-  event.channel.send_embed do |embed|
-    embed.color = EMBED_COLOR
-    embed.title = "Pokemon caught by #{event.user.name}"
-    embed.description = list_cmd.to_a.map do |spawn|
-      poke = spawn.pokemon
-      "**#{poke.name}:** Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
-    end.join("\n")
-    embed.footer = Discordrb::Webhooks::EmbedFooter.new(
-      text: "Displaying page #{one_indexed_page_num} of #{list_cmd.total_pages}"
-    )
+  pokemons = list_cmd.to_a
+  if pokemons.length > 0
+    event.channel.send_embed do |embed|
+      embed.color = EMBED_COLOR
+      embed.title = "Pokemon caught by #{event.user.name}"
+      embed.description = pokemons.map do |spawn|
+        poke = spawn.pokemon
+        "**#{poke.name}:** Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
+      end.join("\n")
+      embed.footer = Discordrb::Webhooks::EmbedFooter.new(
+        text: "Displaying page #{one_indexed_page_num} of #{list_cmd.total_pages}"
+      )
+    end
+  else
+    "You do not have any Pokemon! Try to catch some with the `p!catch` command."
   end
 end
 
