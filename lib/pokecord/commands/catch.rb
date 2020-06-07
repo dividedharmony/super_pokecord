@@ -40,8 +40,8 @@ module Pokecord
 
       def user
         @_user ||= begin
-          user_repo.users.where(discord_id: event.user.id).one ||
-            user_repo.create(discord_id: event.user.id, created_at: Time.now)
+          user_repo.users.where(discord_id: event.user.id.to_s).one ||
+            user_repo.create(discord_id: event.user.id.to_s, created_at: Time.now)
         end
       end
 
