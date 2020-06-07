@@ -15,7 +15,7 @@ bot.message(containing: not!("p!"), in: poke_channels) do |event|
   poke_steps += 1
   if poke_steps >= poke_requirement
     poke_steps = 0
-    poke_requirement = rand(100) + 10
+    poke_requirement = rand(11) + 5
     # spawn a wild pokemon
     wild_pokemon = Pokecord::WildPokemon.new
     wild_pokemon.spawn!
