@@ -42,11 +42,12 @@ bot.command(:catch) do |event, name_guess|
   end
 end
 
-bot.command(:pokemon) do |event, page_num|
-  page_number = page_num || 0
+bot.command(:pokemon) do |event, given_page_num|
+  one_indexed_page_num = given_page_num || 1
+  actual_page_num = one_indexed_page_num - 1
   list_cmd = Pokecord::Commands::ListPokemons.new(
     event.user.id.to_s,
-    page_number
+    actual_page_num
   )
   event.channel.send_embed do |embed|
     embed.color = EMBED_COLOR
@@ -56,7 +57,7 @@ bot.command(:pokemon) do |event, page_num|
       "**#{poke.name}:** Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
     end.join("\n")
     embed.footer = Discordrb::Webhooks::EmbedFooter.new(
-      text: "Displaying page #{page_number} of #{list_cmd.total_pages}"
+      text: "Displaying page #{one_indexed_page_num} of #{list_cmd.total_pages}"
     )
   end
 end
