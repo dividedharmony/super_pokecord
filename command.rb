@@ -5,6 +5,7 @@ require 'discordrb'
 
 require_relative './lib/pokecord/wild_pokemon'
 require_relative './lib/pokecord/commands/catch'
+require_relative './lib/pokecord/commands/select'
 require_relative './lib/pokecord/commands/list_pokemons'
 
 EMBED_COLOR = '#34d8eb'
@@ -67,6 +68,21 @@ bot.command(:pokemon) do |event, given_page_num|
   end
 end
 
+# TODO allow user to select on nickname or pokemon name
+bot.command(:select) do |event, catch_number|
+  if catch_number.nil? || catch_number !~ /\A\d+\z/
+    'Correct usage of this command is `p!select [catch number]`'
+  else
+    select_cmd = Pokecord::Commands::Select.new(event.user.id.to_s, catch_number.to_i)
+    if select_cmd.valid_number?
+      spawned_poke = select_cmd.call
+      "#{event.user.mention}, you have selected your #{spawned_poke.pokemon.name}"
+    else
+      'Sorry, you do not have a Pokemon with that catch number.'
+    end
+  end
+end
+
 %w{
   pick
   order
@@ -81,7 +97,6 @@ end
   fav
   addfav
   removefav
-  select
   moves
   learn
   replace
