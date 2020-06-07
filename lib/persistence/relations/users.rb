@@ -8,6 +8,7 @@ module Persistence
       schema(:users, infer: true) do
         associations do
           has_many :spawned_pokemons
+          belongs_to :current_pokemon
         end
       end
 
