@@ -24,7 +24,7 @@ module Pokecord
       end
 
       def name_correct?
-        catchable_spawned_pokemon.pokemon.name == name_guess
+        catchable_spawned_pokemon.pokemon.name.downcase == name_guess.downcase
       end
 
       def catch!
