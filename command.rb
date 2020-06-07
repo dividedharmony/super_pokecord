@@ -50,7 +50,7 @@ bot.command(:pokemon) do |event, page_num|
   )
   event.channel.send_embed do |embed|
     embed.color = EMBED_COLOR
-    embed.title = "Pokemon caught by #{event.user.mention}"
+    embed.title = "Pokemon caught by #{event.user.name}"
     embed.description = list_cmd.to_a.map do |spawn|
       poke = spawn.pokemon
       "**#{poke.name}:** Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
