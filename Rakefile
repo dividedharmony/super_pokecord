@@ -19,4 +19,9 @@ namespace :pokecord do
     require_relative './lib/taskers/populate_catch_numbers'
     Taskers::PopulateCatchNumbers.new.call
   end
+
+  task :populate_starters do
+    require_relative './lib/taskers/populate_starters'
+    Taskers::PopulateStarters.new.call
+  end
 end
