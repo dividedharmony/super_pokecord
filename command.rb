@@ -6,6 +6,7 @@ require 'discordrb'
 require_relative './lib/pokecord/wild_pokemon'
 require_relative './lib/pokecord/commands/catch'
 require_relative './lib/pokecord/commands/select'
+require_relative './lib/pokecord/commands/nickname'
 require_relative './lib/pokecord/commands/list_pokemons'
 
 EMBED_COLOR = '#34d8eb'
@@ -83,6 +84,23 @@ bot.command(:select) do |event, catch_number|
   end
 end
 
+bot.command(:nickname) do |event, *words|
+  if words.length.zero?
+    'Correct usage of this command is `p!nickname [one or more words]`.'
+  else
+    nickname = words.join(' ')
+    nickname_cmd = Pokecord::Commands::Nickname.new(event.user.id.to_s, nickname)
+    if nickname_cmd.no_pokemon_to_name?
+      "You do not have a Pokemon selected to nickname. Use `p!pokemon` to view all your Pokemon and `p!select` to choose which one you want to name."
+    elsif nickname_cmd.nickname_taken?
+      "You already have a Pokemon named **#{nickname}**! You cannot use a nickname for more than one Pokemon."
+    else
+      spawn = nickname_cmd.call
+      "#{event.user.mention}, you have successfully named your Pokemon \"**#{spawn.nickname}**\""
+    end
+  end
+end
+
 %w{
   pick
   order
@@ -90,7 +108,6 @@ end
   info
   pokedex
   shop
-  nickname
   release
   mega
   shop
