@@ -32,14 +32,19 @@ bot.command(:wild, permission_level: 2) do |event|
   event.send_file(File.open(wild_pokemon.pic_file, 'r'), caption: "A wild Pokemon appeared! You can try to catch it with `p!catch` (not implemented)")
 end
 
-bot.command(:catch) do |event, name_guess|
-  catch_cmd = Pokecord::Commands::Catch.new(event, name_guess)
-  if catch_cmd.can_catch?
-    if catch_cmd.name_correct?
-      catch_cmd.catch!
-      "Congratulations, #{event.user.mention}! You have successfully caught this Pokemon!"
-    else
-      'That is not the right Pokemon!'
+bot.command(:catch) do |event, *args|
+  if args.length.zero?
+    'Correct usage of this command is `p!catch [pokemon name]`. A wild Pokemon must be present in order for you to catch one.'
+  else
+    name_guess = args.join(' ')
+    catch_cmd = Pokecord::Commands::Catch.new(event, name_guess)
+    if catch_cmd.can_catch?
+      if catch_cmd.name_correct?
+        catch_cmd.catch!
+        "Congratulations, #{event.user.mention}! You have successfully caught this Pokemon!"
+      else
+        'That is not the right Pokemon!'
+      end
     end
   end
 end
