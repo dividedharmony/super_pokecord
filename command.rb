@@ -4,6 +4,7 @@ require 'dotenv/load'
 require 'discordrb'
 
 require_relative './lib/pokecord/wild_pokemon'
+require_relative './lib/pokecord/starter_pokemons'
 require_relative './lib/pokecord/commands/catch'
 require_relative './lib/pokecord/commands/select'
 require_relative './lib/pokecord/commands/info'
@@ -22,9 +23,25 @@ if ENV['DEVELOPER_ID']
 end
 
 bot.command :start do |event|
+  event.channel.send_embed do |embed|
+    embed.color = EMBED_COLOR
+    embed.title = 'Welcome to Pokecord'
+    embed.description = <<~DESC
+      This is a Discord bot that
+      allows users to catch, trade,
+      and train Pokemon! First,
+      you need a starter Pokemon.
+      Pick one of the following
+      starters with the command
+      `p!pick [pokemon name]`
+    DESC
+    Pokecord::StarterPokemons.new.to_h.each do |region, pokemons|
+      poke_names = pokemons.map { |poke| poke.name }.join(', ')
+      embed.add_field(name: region, value: poke_names)
+    end
+  end
   starter_file = File.expand_path('assets/starters.png', File.dirname(__FILE__))
   event.send_file(File.open(starter_file, 'r'), caption: 'Pick your pokemon')
-  "You can select one with `p!start [pokemon name]` (not implemented)"
 end
 
 bot.command(:wild, permission_level: 2) do |event|
