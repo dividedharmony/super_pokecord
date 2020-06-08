@@ -45,7 +45,7 @@ bot.command(:catch) do |event, name_guess|
 end
 
 bot.command(:pokemon) do |event, given_page_num|
-  one_indexed_page_num = given_page_num || 1
+  one_indexed_page_num = given_page_num&.to_i || 1
   actual_page_num = one_indexed_page_num - 1
   list_cmd = Pokecord::Commands::ListPokemons.new(
     event.user.id.to_s,
