@@ -6,6 +6,7 @@ require 'discordrb'
 require_relative './lib/pokecord/wild_pokemon'
 require_relative './lib/pokecord/commands/catch'
 require_relative './lib/pokecord/commands/select'
+require_relative './lib/pokecord/commands/info'
 require_relative './lib/pokecord/commands/nickname'
 require_relative './lib/pokecord/commands/list_pokemons'
 
@@ -89,6 +90,38 @@ bot.command(:select) do |event, catch_number|
   end
 end
 
+bot.command(:info) do |event|
+  info_cmd = Pokecord::Commands::Info.new(event.user.id.to_s)
+  poke_spawn = info_cmd.call
+  if poke_spawn.nil?
+    "You do not have a Pokemon selected to see its info. Use `p!pokemon` to view all your Pokemon and `p!select` to choose which one you want to name."
+  else
+    poke_ideal = poke_spawn.pokemon
+    pokedex_display = poke_ideal.pokedex_number.to_s.rjust(3, '0')
+    event.channel.send_embed do |embed|
+      embed.color = EMBED_COLOR
+      embed.title = "#{event.user.name}'s #{poke_spawn.nickname || poke_ideal.name}"
+      embed.description = "Level xxx #{poke_ideal.name}"
+      embed.add_field(name: 'Pokedex No.', value: pokedex_display)
+      embed.add_field(name: 'HP', value: poke_ideal.base_hp)
+      embed.add_field(name: 'Attack', value: poke_ideal.base_attack)
+      embed.add_field(name: 'Defense', value: poke_ideal.base_defense)
+      embed.add_field(name: 'Sp. Attack', value: poke_ideal.base_sp_attack)
+      embed.add_field(name: 'Sp. Defense', value: poke_ideal.base_sp_defense)
+      embed.add_field(name: 'Speed', value: poke_ideal.base_speed)
+      embed.add_field(name: 'Caught At', value: poke_spawn.caught_at.strftime('%Y-%m-%d'))
+    end
+    event.send_file(
+      File.open(
+        File.expand_path(
+          "./pokemon_info/images/#{pokedex_display}.png", File.dirname(__FILE__)
+        ),
+        'r'
+      )
+    )
+  end
+end
+
 bot.command(:nickname) do |event, *words|
   if words.length.zero?
     'Correct usage of this command is `p!nickname [one or more words]`.'
@@ -110,7 +143,6 @@ end
   pick
   order
   hint
-  info
   pokedex
   shop
   release
