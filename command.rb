@@ -81,7 +81,8 @@ bot.command(:pokemon) do |event, given_page_num|
       embed.title = "Pokemon caught by #{event.user.name}"
       embed.description = pokemons.map do |spawn|
         poke = spawn.pokemon
-        "**#{poke.name}** ---> nickname: #{spawn.nickname}, Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
+        nickname_string = spawn.nickname.nil? ? '' : "nickname: #{spawn.nickname},"
+        "**#{poke.name}** ---> #{nickname_string} Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
       end.join("\n")
       embed.footer = Discordrb::Webhooks::EmbedFooter.new(
         text: "Displaying page #{one_indexed_page_num} of #{list_cmd.total_pages}"
