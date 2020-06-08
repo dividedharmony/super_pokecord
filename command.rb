@@ -5,6 +5,7 @@ require 'discordrb'
 
 require_relative './lib/pokecord/wild_pokemon'
 require_relative './lib/pokecord/starter_pokemons'
+require_relative './lib/pokecord/commands/pick'
 require_relative './lib/pokecord/commands/catch'
 require_relative './lib/pokecord/commands/select'
 require_relative './lib/pokecord/commands/info'
@@ -42,6 +43,25 @@ bot.command :start do |event|
   end
   starter_file = File.expand_path('assets/starters.png', File.dirname(__FILE__))
   event.send_file(File.open(starter_file, 'r'), caption: 'Pick your pokemon')
+end
+
+bot.command(:pick) do |event, *args|
+  if args.length.zero?
+    "Correct usage of this command is `p!pick [name of a starter pokemon]`."
+  else
+    poke_name = args.join(' ').capitalize
+    pick_cmd = Pokecord::Commands::Pick.new(event.user.id.to_s, poke_name)
+    if pick_cmd.already_picked_starter?
+      "You have already picked a starter Pokemon!"
+    elsif pick_cmd.name_incorrect?
+      "Could not find a Pokemon with the name \"#{poke_name}\""
+    elsif pick_cmd.is_not_starter?
+      "Unfortunately, #{poke_name} is not a starter Pokemon. Please select a different Pokemon from the `p!start` list."
+    else
+      picked_pokemon = pick_cmd.call
+      "Congratulations, #{event.user.mention}! You have successfully picked a #{picked_pokemon.name} as your starting Pokemon!"
+    end
+  end
 end
 
 bot.command(:wild, permission_level: 2) do |event|
@@ -158,7 +178,6 @@ bot.command(:nickname) do |event, *words|
 end
 
 %w{
-  pick
   order
   hint
   pokedex
