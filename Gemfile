@@ -11,3 +11,7 @@ gem 'pg'
 gem 'sequel_pg'
 
 gem 'rake'
+
+group :test do
+  gem 'rspec'
+end

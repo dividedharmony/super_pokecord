@@ -18,3 +18,4 @@ tmp
 # they are listed in ascending hierarchical order
 # See https://github.com/bkeepers/dotenv for more information
 .env
+.env.test
