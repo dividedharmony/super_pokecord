@@ -7,6 +7,17 @@ namespace :db do
     require_relative './db/connection'
     ROM::SQL::RakeSupport.env = Db::Connection.container
   end
+
+  namespace :test do
+    task :setup do
+      require 'dotenv'
+      Dotenv.load('.env.test')
+      require_relative './db/connection'
+      ROM::SQL::RakeSupport.env = Db::Connection.container
+      Rake::Task['db:clean'].execute
+      Rake::Task['db:migrate'].execute
+    end
+  end
 end
 
 namespace :pokecord do
