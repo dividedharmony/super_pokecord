@@ -20,6 +20,7 @@ Dotenv.load('.env.test')
 
 require_relative '../db/connection'
 require 'database_cleaner/sequel'
+require 'rom/factory'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -57,6 +58,12 @@ RSpec.configure do |config|
     Db::Connection.registered_container
     DatabaseCleaner[:sequel].strategy = :transaction
     DatabaseCleaner[:sequel].clean_with(:truncation)
+
+    TestingFactory = ROM::Factory.configure do |config|
+      config.rom = Db::Connection.registered_container
+    end
+
+    Dir[File.dirname(__FILE__) + '/support/factories/*.rb'].each { |file| require file }
   end
 
   config.before(:each) do
