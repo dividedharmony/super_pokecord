@@ -4,23 +4,25 @@ require_relative '../../db/connection'
 require_relative '../repositories/pokemon_repo'
 require_relative '../repositories/spawned_pokemon_repo'
 
+require_relative './random_levels'
+
 module Pokecord
   class WildPokemon
-    def initialize
+    def initialize(rand_proc = nil)
+      @rand_proc = rand_proc
       @poke_repo = Repositories::PokemonRepo.new(
         Db::Connection.registered_container
       )
       @spawn_repo = Repositories::SpawnedPokemonRepo.new(
         Db::Connection.registered_container
       )
-      @pokedex_number = rand(809) + 1
-      @pokemon = poke_repo.pokemons.where(pokedex_number: pokedex_number).one!
     end
 
     def spawn!
       @spawned_pokemon = spawn_repo.create(
-        pokemon_id: pokemon.id,
-        created_at: Time.now
+        pokemon_id: random_pokemon.id,
+        created_at: Time.now,
+        level: Pokecord::RandomLevels.new.rand_level
       )
     end
 
@@ -33,10 +35,22 @@ module Pokecord
 
     private
 
-    attr_reader :poke_repo,
+    attr_reader :rand_proc,
+                :poke_repo,
                 :spawn_repo,
-                :pokedex_number,
-                :pokemon,
                 :spawned_pokemon
+
+    def pokedex_number
+      @_pokedex_number ||= rand_proc.call(809) + 1
+    end
+
+    def random_pokemon
+      $stdout.puts "poke count = #{poke_repo.pokemons.count}"
+      $stdout.puts "pokedex num = #{poke_repo.pokemons.first.pokedex_number}"
+      @_random_pokemon ||=  poke_repo.
+        pokemons.
+        where(pokedex_number: pokedex_number).
+        one!
+    end
   end
 end
