@@ -45,8 +45,6 @@ module Pokecord
     end
 
     def random_pokemon
-      $stdout.puts "poke count = #{poke_repo.pokemons.count}"
-      $stdout.puts "pokedex num = #{poke_repo.pokemons.first.pokedex_number}"
       @_random_pokemon ||=  poke_repo.
         pokemons.
         where(pokedex_number: pokedex_number).

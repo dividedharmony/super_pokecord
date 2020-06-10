@@ -35,4 +35,9 @@ namespace :pokecord do
     require_relative './lib/taskers/populate_starters'
     Taskers::PopulateStarters.new.call
   end
+
+  task :populate_levels do
+    require_relative './lib/taskers/populate_levels'
+    Taskers::PopulateLevels.new.call
+  end
 end
