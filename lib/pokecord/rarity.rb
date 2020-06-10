@@ -36,7 +36,7 @@ module Pokecord
 
     private
 
-    attr_reader :pokemon_repo
+    attr_reader :rand_proc, :pokemon_repo
 
     def random_rarity_enum
       random_number = rand_proc.call(MAXIMUM_RARITY)

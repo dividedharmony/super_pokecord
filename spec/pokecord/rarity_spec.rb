@@ -31,18 +31,68 @@ RSpec.describe Pokecord::Rarity do
   end
 
   describe '#random_pokemon' do
+    subject do
+      described_class.new(not_random_proc).random_pokemon
+    end
+
     context 'if a common pokemon is "randomly" selected' do
-      before do
-        # TODO create pokemon of common rarity
+      let(:not_random_proc) do
+        Proc.new { |_| 0 }
+      end
+      let!(:common_pokemon) { TestingFactory[:pokemon, :common] }
+      let!(:mythic_pokemon) { TestingFactory[:pokemon, :mythic] }
+
+      it 'returns a common pokemon' do
+        expect(subject.id).to eq(common_pokemon.id)
       end
     end
 
-    context 'if a rare pokemon is "randomly" selected'
+    context 'if a rare pokemon is "randomly" selected' do
+      let(:not_random_proc) do
+        Proc.new { |_| 1_001 }
+      end
+      let!(:rare_pokemon) { TestingFactory[:pokemon, :rare] }
+      let!(:mythic_pokemon) { TestingFactory[:pokemon, :mythic] }
 
-    context 'if a very_rare pokemon is "randomly" selected'
+      it 'returns a rare pokemon' do
+        expect(subject.id).to eq(rare_pokemon.id)
+      end
+    end
 
-    context 'if a legendary pokemon is "randomly" selected'
+    context 'if a very_rare pokemon is "randomly" selected' do
+      let(:not_random_proc) do
+        Proc.new { |_| 1_639 }
+      end
+      let!(:very_rare_pokemon) { TestingFactory[:pokemon, :very_rare] }
+      let!(:mythic_pokemon) { TestingFactory[:pokemon, :mythic] }
 
-    context 'if a mythic pokemon is "randomly" selected'
+      it 'returns a very_rare pokemon' do
+        expect(subject.id).to eq(very_rare_pokemon.id)
+      end
+    end
+
+    context 'if a legendary pokemon is "randomly" selected' do
+      let(:not_random_proc) do
+        Proc.new { |_| 1_739 }
+      end
+      let!(:legendary_pokemon) { TestingFactory[:pokemon, :legendary] }
+      let!(:mythic_pokemon) { TestingFactory[:pokemon, :mythic] }
+
+      it 'returns a legendary pokemon' do
+        expect(subject.id).to eq(legendary_pokemon.id)
+      end
+    end
+
+    context 'if a mythic pokemon is "randomly" selected' do
+      let(:not_random_proc) do
+        Proc.new { |_| 1_749 }
+      end
+      let!(:common_pokemon) { TestingFactory[:pokemon, :common] }
+      let!(:mythic_pokemon) { TestingFactory[:pokemon, :mythic] }
+
+      it 'returns a mythic pokemon' do
+        expect(subject.id).to eq(mythic_pokemon.id)
+      end
+    end
   end
 end
