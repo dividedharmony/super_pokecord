@@ -67,7 +67,8 @@ module Pokecord
           user_id: user.id,
           created_at: Time.now,
           caught_at: Time.now,
-          catch_number: catch_number
+          catch_number: catch_number,
+          level: 1
         )
       end
 
