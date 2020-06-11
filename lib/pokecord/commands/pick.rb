@@ -55,7 +55,11 @@ module Pokecord
       def user
         @_user ||= begin
           user_repo.users.where(discord_id: discord_id).one ||
-            user_repo.create(discord_id: discord_id, created_at: Time.now)
+            user_repo.create(
+              discord_id: discord_id,
+              exp_per_step: Pokecord::ExpCurve::EXP_PER_STEP,
+              created_at: Time.now
+            )
         end
       end
 

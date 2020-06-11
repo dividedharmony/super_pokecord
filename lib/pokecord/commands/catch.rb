@@ -4,6 +4,8 @@ require_relative '../../../db/connection'
 require_relative '../../repositories/user_repo'
 require_relative '../../repositories/spawned_pokemon_repo'
 
+require_relative '../exp_curve'
+
 module Pokecord
   module Commands
     class Catch
@@ -45,7 +47,11 @@ module Pokecord
       def user
         @_user ||= begin
           user_repo.users.where(discord_id: event.user.id.to_s).one ||
-            user_repo.create(discord_id: event.user.id.to_s, created_at: Time.now)
+            user_repo.create(
+              discord_id: event.user.id.to_s,
+              exp_per_step: Pokecord::ExpCurve::EXP_PER_STEP,
+              created_at: Time.now
+            )
         end
       end
 
