@@ -5,6 +5,7 @@ require_relative '../repositories/pokemon_repo'
 require_relative '../repositories/spawned_pokemon_repo'
 
 require_relative './random_levels'
+require_relative './exp_curve'
 
 module Pokecord
   class WildPokemon
@@ -22,7 +23,8 @@ module Pokecord
       @spawned_pokemon = spawn_repo.create(
         pokemon_id: random_pokemon.id,
         created_at: Time.now,
-        level: Pokecord::RandomLevels.new.rand_level
+        level: random_level,
+        required_exp: required_exp
       )
     end
 
@@ -49,6 +51,14 @@ module Pokecord
         pokemons.
         where(pokedex_number: pokedex_number).
         one!
+    end
+
+    def random_level
+      @_random_level ||= Pokecord::RandomLevels.new.rand_level
+    end
+
+    def required_exp
+      Pokecord::ExpCurve.new(random_level).required_exp_for_next_level
     end
   end
 end

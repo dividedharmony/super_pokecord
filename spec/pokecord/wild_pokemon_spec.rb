@@ -25,6 +25,8 @@ RSpec.describe Pokecord::WildPokemon do
       # 3 seconds
       expect(spawn.created_at).to be_within(3).of(Time.now)
       expect(spawn.level).to be_between(1, 49)
+      expect(spawn.current_exp).to eq(0)
+      expect(spawn.required_exp).to be_between(300, 2_250)
     end
   end
 
