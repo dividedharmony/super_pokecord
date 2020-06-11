@@ -78,8 +78,8 @@ bot.command(:catch) do |event, *args|
     catch_cmd = Pokecord::Commands::Catch.new(event, name_guess)
     if catch_cmd.can_catch?
       if catch_cmd.name_correct?
-        catch_cmd.catch!
-        "Congratulations, #{event.user.mention}! You have successfully caught this Pokemon!"
+        poke_spawn = catch_cmd.catch!
+        "Congratulations, #{event.user.mention}! You have successfully caught a level #{poke_spawn.level} **#{poke_spawn.pokemon.name}**!"
       else
         'That is not the right Pokemon!'
       end
@@ -102,7 +102,7 @@ bot.command(:pokemon) do |event, given_page_num|
       embed.description = pokemons.map do |spawn|
         poke = spawn.pokemon
         nickname_string = spawn.nickname.nil? ? '' : "nickname: #{spawn.nickname},"
-        "**#{poke.name}** ---> #{nickname_string} Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
+        "**#{poke.name}** ---> #{nickname_string} Level: #{spawn.level}, Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
       end.join("\n")
       embed.footer = Discordrb::Webhooks::EmbedFooter.new(
         text: "Displaying page #{one_indexed_page_num} of #{list_cmd.total_pages}"
@@ -139,7 +139,7 @@ bot.command(:info) do |event|
     event.channel.send_embed do |embed|
       embed.color = EMBED_COLOR
       embed.title = "#{event.user.name}'s #{poke_spawn.nickname || poke_ideal.name}"
-      embed.description = "Level xxx #{poke_ideal.name}"
+      embed.description = "Level #{poke_spawn.level} #{poke_ideal.name}"
       embed.add_field(name: 'Pokedex No.', value: pokedex_display)
       embed.add_field(name: 'HP', value: poke_ideal.base_hp)
       embed.add_field(name: 'Attack', value: poke_ideal.base_attack)

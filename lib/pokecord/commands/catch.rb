@@ -27,12 +27,15 @@ module Pokecord
         catchable_spawned_pokemon.pokemon.name.downcase == name_guess.downcase
       end
 
+      # sets the spawned pokemon to the user
+      # and returns that spawned_pokemon
       def catch!
         update_command.call(
           user_id: user.id,
           caught_at: Time.now,
           catch_number: catch_number
         )
+        catchable_spawned_pokemon
       end
 
       private
