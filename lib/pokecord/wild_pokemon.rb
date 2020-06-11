@@ -9,7 +9,7 @@ require_relative './random_levels'
 module Pokecord
   class WildPokemon
     def initialize(rand_proc = nil)
-      @rand_proc = rand_proc
+      @rand_proc = rand_proc || Proc.new { |x| rand(x) }
       @poke_repo = Repositories::PokemonRepo.new(
         Db::Connection.registered_container
       )
