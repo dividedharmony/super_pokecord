@@ -5,6 +5,8 @@ require_relative '../../repositories/user_repo'
 require_relative '../../repositories/pokemon_repo'
 require_relative '../../repositories/spawned_pokemon_repo'
 
+require_relative '../exp_curve'
+
 module Pokecord
   module Commands
     class Pick
@@ -68,7 +70,8 @@ module Pokecord
           created_at: Time.now,
           caught_at: Time.now,
           catch_number: catch_number,
-          level: 1
+          level: 1,
+          required_exp: required_exp
         )
       end
 
@@ -78,6 +81,10 @@ module Pokecord
 
       def catch_number
         spawn_repo.max_catch_number(user) + 1
+      end
+
+      def required_exp
+        Pokecord::ExpCurve.new(1).required_exp_for_next_level
       end
     end
   end
