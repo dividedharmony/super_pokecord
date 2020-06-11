@@ -8,6 +8,9 @@ ROM::SQL.migration do
   end
 
   down do
-    run 'ALTER TABLE users ALTER COLUMN discord_id TYPE integer USING discord_id::integer'
+    alter_table(:users) do
+      drop_column :discord_id
+      add_column :discord_id, Integer, null: false, default: 0
+    end
   end
 end
