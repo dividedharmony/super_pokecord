@@ -45,4 +45,9 @@ namespace :pokecord do
     require_relative './lib/taskers/populate_required_exp'
     Taskers::PopulateRequiredExp.new.call
   end
+
+  task :reset_users_exp_per_step do
+    require_relative './lib/taskers/reset_users_exp_per_step'
+    Taskers::ResetUsersExpPerStep.new.call
+  end
 end
