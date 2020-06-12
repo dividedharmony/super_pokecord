@@ -41,7 +41,7 @@ bot.command :start do |event|
       embed.add_field(name: region, value: poke_names)
     end
   end
-  starter_file = File.expand_path('assets/starters.png', File.dirname(__FILE__))
+  starter_file = File.expand_path('assets/starter_heart.jpg', File.dirname(__FILE__))
   event.send_file(File.open(starter_file, 'r'), caption: 'Pick your pokemon')
 end
 
