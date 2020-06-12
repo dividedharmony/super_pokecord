@@ -8,6 +8,12 @@ namespace :db do
     ROM::SQL::RakeSupport.env = Db::Connection.container
   end
 
+  task :seed do
+    Rake::Task['pokecord:populate_pokemon'].execute
+    Rake::Task['pokecord:populate_starters'].execute
+    Rake::Task['pokecord:populate_galar_pokemon'].execute
+  end
+
   namespace :test do
     task :setup do
       require 'dotenv'
