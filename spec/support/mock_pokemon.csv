@@ -1,0 +1,3 @@
+name,starter,pokedex_number,base_hp,base_attack,base_defense,base_sp_attack,base_sp_defense,base_speed,Total,Evolve
+Grookey,x,810,50,65,50,40,40,65,310,
+Thwackey,,811,70,85,70,55,60,80,420,Grookey -> lvl 16

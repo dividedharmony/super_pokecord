@@ -26,6 +26,12 @@ namespace :pokecord do
     Taskers::PopulatePokemons.new.call
   end
 
+  task :populate_galar_pokemon do
+    require_relative './lib/taskers/populate_pokemon_from_csv'
+    galar_file = File.expand_path('pokemon_info/galar_pokedex.csv', File.dirname(__FILE__))
+    Taskers::PopulatePokemonFromCsv.new(galar_file).call
+  end
+
   task :populate_catch_numbers do
     require_relative './lib/taskers/populate_catch_numbers'
     Taskers::PopulateCatchNumbers.new.call
