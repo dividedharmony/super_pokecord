@@ -7,6 +7,8 @@ require 'rom-sql'
 require_relative '../lib/persistence/relations/users'
 require_relative '../lib/persistence/relations/pokemons'
 require_relative '../lib/persistence/relations/spawned_pokemons'
+require_relative '../lib/persistence/relations/fight_types'
+require_relative '../lib/persistence/relations/fight_events'
 
 module Db
   class Connection
@@ -23,7 +25,9 @@ module Db
           configuration.register_relation(
             Persistence::Relations::Users,
             Persistence::Relations::Pokemons,
-            Persistence::Relations::SpawnedPokemons
+            Persistence::Relations::SpawnedPokemons,
+            Persistence::Relations::FightTypes,
+            Persistence::Relations::FightEvents
           )
           ROM.container(configuration)
         end
