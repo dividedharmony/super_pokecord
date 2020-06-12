@@ -33,7 +33,7 @@ module Pokecord
     def user
       @_user ||= user_repo.
         users.
-        combine(:current_pokemon).
+        combine(current_pokemon: :pokemon).
         where(discord_id: discord_id).
         one
     end
