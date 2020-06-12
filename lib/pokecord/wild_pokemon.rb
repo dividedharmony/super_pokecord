@@ -43,7 +43,7 @@ module Pokecord
                 :spawned_pokemon
 
     def pokedex_number
-      @_pokedex_number ||= rand_proc.call(809) + 1
+      @_pokedex_number ||= rand_proc.call(max_pokedex_number) + 1
     end
 
     def random_pokemon
@@ -59,6 +59,10 @@ module Pokecord
 
     def required_exp
       Pokecord::ExpCurve.new(random_level).required_exp_for_next_level
+    end
+
+    def max_pokedex_number
+      poke_repo.pokemons.max(:pokedex_number)
     end
   end
 end
