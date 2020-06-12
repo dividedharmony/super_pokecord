@@ -5,13 +5,25 @@ require 'discordrb'
 
 require_relative './lib/pokecord/spawn_rate'
 require_relative './lib/pokecord/wild_pokemon'
+require_relative './lib/pokecord/step_counter'
 
 bot = Discordrb::Bot.new(token: ENV["DISCORD_TOKEN"])
 
 poke_channels = (ENV["POKECORD_CHANNELS"] || "").split(',')
 spawn_rate = Pokecord::SpawnRate.new(5, 15)
+previous_discord_id = nil
 
 bot.message(containing: not!("p!"), in: poke_channels) do |event|
+  # Step exp logic
+  current_discord_id = event.user.id.to_s
+  level_up_payload = Pokecord::StepCounter.new(current_discord_id).step!(previous_discord_id)
+  previous_discord_id = current_discord_id
+  if level_up_payload
+    current_poke_spawn = level_up_payload.spawned_pokemon
+    poke_name = current_poke_spawn.nickname || current_poke_spawn.pokemon.name
+    event.respond("Congrats, #{event.user.mention}! Your **#{poke_name}** has leveled up to #{level_up_payload.level}!")
+  end
+  # Spawn Logic
   spawn_rate.step!
   if spawn_rate.should_spawn?
     spawn_rate.reset!
