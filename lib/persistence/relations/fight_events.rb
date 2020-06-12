@@ -4,10 +4,11 @@ require 'rom-sql'
 
 module Persistence
   module Relations
-    class FightTypes < ROM::Relation[:sql]
-      schema(:fight_types, infer: true) do
+    class FightEvents < ROM::Relation[:sql]
+      schema(:fight_events, infer: true) do
         associations do
-          has_many :fight_events
+          belongs_to :fight_type
+          belongs_to :user
         end
       end
 

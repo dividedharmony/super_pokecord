@@ -7,6 +7,7 @@ module Persistence
     class Users < ROM::Relation[:sql]
       schema(:users, infer: true) do
         associations do
+          has_many :fight_events
           has_many :spawned_pokemons
           belongs_to :spawned_pokemon, combine_key: :current_pokemon_id, as: :current_pokemon
         end
