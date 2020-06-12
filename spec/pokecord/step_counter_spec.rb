@@ -16,6 +16,7 @@ RSpec.describe Pokecord::StepCounter do
     end
     let(:previous_discord_id) { '987654321' }
     let(:step_counter) { described_class.new('123456789') }
+    let(:mock_payload) { double('LevelUpPayload') }
 
     subject { step_counter.step!(previous_discord_id) }
 
@@ -37,9 +38,6 @@ RSpec.describe Pokecord::StepCounter do
       end
 
       context 'user does have a current_pokemon' do
-        let(:leveled_up) { false }
-        let(:current_level) { 13 }
-
         before do
           @spawn_pokemon = TestingFactory[
             :spawned_pokemon,
@@ -53,8 +51,7 @@ RSpec.describe Pokecord::StepCounter do
           mock_exp_applier = instance_double(
             Pokecord::ExpApplier,
             apply!: nil,
-            leveled_up: leveled_up,
-            current_level: current_level
+            payload: mock_payload
           )
           expect(Pokecord::ExpApplier).to receive(:new).with(any_args) { mock_exp_applier }
         end
@@ -69,26 +66,11 @@ RSpec.describe Pokecord::StepCounter do
               @user = user_repo.users.where(id: @user.id).one!
             end
 
-            context 'if the current_pokemon levels up' do
-              let(:leveled_up) { true }
-
-              it 'returns the new level' do
-                expect { subject }.not_to change {
-                  user_repo.users.where(id: @user.id).one.exp_per_step
-                }.from(25)
-                expect(subject).to eq(13)
-              end
-            end
-
-            context 'if the current_pokemon does not level up' do
-              let(:leveled_up) { false }
-
-              it 'returns nil' do
-                expect { subject }.not_to change {
-                  user_repo.users.where(id: @user.id).one.exp_per_step
-                }.from(25)
-                expect(subject).to be_nil
-              end
+            it 'returns the ExpApplier::LevelUpPayload' do
+              expect { subject }.not_to change {
+                user_repo.users.where(id: @user.id).one.exp_per_step
+              }.from(25)
+              expect(subject).to eq(mock_payload)
             end
           end
 
@@ -99,26 +81,11 @@ RSpec.describe Pokecord::StepCounter do
               @user = user_repo.users.where(id: @user.id).one!
             end
 
-            context 'if the current_pokemon levels up' do
-              let(:leveled_up) { true }
-
-              it 'lowers the user.exp_per_step and returns the new level' do
-                expect { subject }.to change {
-                  user_repo.users.where(id: @user.id).one.exp_per_step
-                }.from(36).to(35)
-                expect(subject).to eq(13)
-              end
-            end
-
-            context 'if the current_pokemon does not level up' do
-              let(:leveled_up) { false }
-
-              it 'lowers the user.exp_per_step and returns nil' do
-                expect { subject }.to change {
-                  user_repo.users.where(id: @user.id).one.exp_per_step
-                }.from(36).to(35)
-                expect(subject).to be_nil
-              end
+            it 'lowers the user.exp_per_step and returns the level up payload' do
+              expect { subject }.to change {
+                user_repo.users.where(id: @user.id).one.exp_per_step
+              }.from(36).to(35)
+              expect(subject).to eq(mock_payload)
             end
           end
         end
@@ -133,26 +100,11 @@ RSpec.describe Pokecord::StepCounter do
               @user = user_repo.users.where(id: @user.id).one!
             end
 
-            context 'if the current_pokemon levels up' do
-              let(:leveled_up) { true }
-
-              it 'returns the new level' do
-                expect { subject }.not_to change {
-                  user_repo.users.where(id: @user.id).one.exp_per_step
-                }.from(50)
-                expect(subject).to eq(13)
-              end
-            end
-
-            context 'if the current_pokemon does not level up' do
-              let(:leveled_up) { false }
-
-              it 'returns nil' do
-                expect { subject }.not_to change {
-                  user_repo.users.where(id: @user.id).one.exp_per_step
-                }.from(50)
-                expect(subject).to be_nil
-              end
+            it 'returns the new level' do
+              expect { subject }.not_to change {
+                user_repo.users.where(id: @user.id).one.exp_per_step
+              }.from(50)
+              expect(subject).to eq(mock_payload)
             end
           end
 
@@ -163,26 +115,11 @@ RSpec.describe Pokecord::StepCounter do
               @user = user_repo.users.where(id: @user.id).one!
             end
 
-            context 'if the current_pokemon levels up' do
-              let(:leveled_up) { true }
-
-              it 'returns the new level' do
-                expect { subject }.to change {
-                  user_repo.users.where(id: @user.id).one.exp_per_step
-                }.from(42).to(43)
-                expect(subject).to eq(13)
-              end
-            end
-
-            context 'if the current_pokemon does not level up' do
-              let(:leveled_up) { false }
-
-              it 'returns nil' do
-                expect { subject }.to change {
-                  user_repo.users.where(id: @user.id).one.exp_per_step
-                }.from(42).to(43)
-                expect(subject).to be_nil
-              end
+            it 'returns the new level' do
+              expect { subject }.to change {
+                user_repo.users.where(id: @user.id).one.exp_per_step
+              }.from(42).to(43)
+              expect(subject).to eq(mock_payload)
             end
           end
         end

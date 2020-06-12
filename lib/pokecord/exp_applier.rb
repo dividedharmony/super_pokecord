@@ -7,6 +7,8 @@ require_relative './exp_curve'
 
 module Pokecord
   class ExpApplier
+    LevelUpPayload = Struct.new(:spawned_pokemon, :level)
+
     def initialize(spawned_pokemon, incoming_exp)
       @spawned_pokemon = spawned_pokemon
       @incoming_exp = incoming_exp
@@ -26,7 +28,7 @@ module Pokecord
         new_total_exp = total_exp - spawned_pokemon.required_exp
         new_required_exp = Pokecord::ExpCurve.new(@current_level).required_exp_for_next_level
         update_command.call(
-          level: @current_level,
+          level: current_level,
           current_exp: new_total_exp,
           required_exp: new_required_exp
         )
@@ -35,11 +37,14 @@ module Pokecord
       end
     end
 
-    attr_reader :current_level, :leveled_up
+    def payload
+      return nil unless leveled_up
+      LevelUpPayload.new(spawned_pokemon, current_level)
+    end
 
     private
 
-    attr_reader :spawned_pokemon, :incoming_exp, :spawn_repo
+    attr_reader :spawned_pokemon, :incoming_exp, :spawn_repo, :current_level, :leveled_up
 
     def update_command
       spawn_repo.
@@ -51,6 +56,7 @@ module Pokecord
     def reload!
       @spawned_pokemon = spawn_repo.
         spawned_pokemons.
+        combine(:pokemon).
         where(id: spawned_pokemon.id).
         one!
     end

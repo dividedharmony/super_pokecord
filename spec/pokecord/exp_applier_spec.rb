@@ -33,6 +33,7 @@ RSpec.describe Pokecord::ExpApplier do
         expect { subject }.not_to change {
           spawn_repo.spawned_pokemons.where(id: spawned_pokemon.id).one.current_exp
         }.from(0)
+        expect(exp_applier.payload).to be_nil
       end
     end
 
@@ -51,9 +52,10 @@ RSpec.describe Pokecord::ExpApplier do
           expect(reloaded_spawn.current_exp).to eq(50)
           new_required_exp = Pokecord::ExpCurve.new(11).required_exp_for_next_level
           expect(reloaded_spawn.required_exp).to eq(new_required_exp)
-          # the applier retains certain data
-          expect(exp_applier.leveled_up).to be true
-          expect(exp_applier.current_level).to eq(11)
+          # the applier returns a payload
+          level_up_payload = exp_applier.payload
+          expect(level_up_payload.spawned_pokemon.id).to eq(reloaded_spawn.id)
+          expect(level_up_payload.level).to eq(11)
         end
       end
 
@@ -70,9 +72,7 @@ RSpec.describe Pokecord::ExpApplier do
           reloaded_spawn = spawn_repo.spawned_pokemons.where(id: spawned_pokemon.id).one
           expect(reloaded_spawn.current_exp).to eq(730)
           expect(reloaded_spawn.required_exp).to eq(750)
-          # the applier retains certain data
-          expect(exp_applier.leveled_up).to be false
-          expect(exp_applier.current_level).to eq(10)
+          expect(exp_applier.payload).to be_nil
         end
       end
     end
@@ -84,6 +84,7 @@ RSpec.describe Pokecord::ExpApplier do
         expect { subject }.not_to change {
           spawn_repo.spawned_pokemons.where(id: spawned_pokemon.id).one.current_exp
         }.from(0)
+        expect(exp_applier.payload).to be_nil
       end
     end
   end

@@ -23,7 +23,7 @@ module Pokecord
       exp_applier = Pokecord::ExpApplier.new(user.current_pokemon, user.exp_per_step)
       exp_applier.apply!
       update_user_exp_per_step(previous_discord_id)
-      exp_applier.current_level if exp_applier.leveled_up
+      exp_applier.payload
     end
 
     private
