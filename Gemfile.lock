@@ -126,6 +126,7 @@ GEM
     sequel_pg (1.13.0)
       pg (>= 0.18.0, != 1.2.0)
       sequel (>= 4.38.0)
+    timecop (0.9.1)
     transproc (1.1.1)
     unf (0.1.4)
       unf_ext
@@ -151,6 +152,7 @@ DEPENDENCIES
   rom-sql
   rspec
   sequel_pg
+  timecop
 
 RUBY VERSION
    ruby 2.6.6p146
