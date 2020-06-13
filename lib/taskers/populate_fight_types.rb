@@ -33,26 +33,41 @@ module Taskers
         {
           code: 'rando',
           time_delay: Duration.minutes_in_seconds(15),
+          max_reward: 1000,
+          min_reward: 10,
+          pokemon_multiplier_reward: 1,
           created_at: time_of_creation
         },
         {
           code: 'rival',
           time_delay: Duration.hours_in_seconds(1),
+          max_reward: 2000,
+          min_reward: 500,
+          pokemon_multiplier_reward: 5,
           created_at: time_of_creation
         },
         {
           code: 'gym',
           time_delay: Duration.hours_in_seconds(24),
+          max_reward: 15_000,
+          min_reward: 5_000,
+          pokemon_multiplier_reward: 10,
           created_at: time_of_creation
         },
         {
           code: 'elite_four',
           time_delay: Duration.hours_in_seconds(24),
+          max_reward: 45_000,
+          min_reward: 35_000,
+          pokemon_multiplier_reward: 100,
           created_at: time_of_creation
         },
         {
           code: 'champion',
           time_delay: Duration.hours_in_seconds(24),
+          max_reward: 180_000,
+          min_reward: 120_000,
+          pokemon_multiplier_reward: 500,
           created_at: time_of_creation
         }
       ]

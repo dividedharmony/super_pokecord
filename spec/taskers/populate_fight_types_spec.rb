@@ -9,8 +9,13 @@ RSpec.describe Taskers::PopulateFightTypes do
         Db::Connection.registered_container
       )
     end
+    let(:mock_output) { double('STDOUT') }
 
-    subject { described_class.new.call }
+    subject { described_class.new(mock_output).call }
+
+    before do
+      allow(mock_output).to receive(:puts).with(instance_of(String))
+    end
 
     it 'populates the fight_types' do
       expect { subject }.to change {
@@ -26,7 +31,7 @@ RSpec.describe Taskers::PopulateFightTypes do
       expect(gym_type.time_delay).to eq(Duration.hours_in_seconds(24))
 
       elite_four_type = fight_type_repo.fight_types.where(code: 'elite_four').one!
-      expect(elite_four.time_delay).to eq(Duration.hours_in_seconds(24))
+      expect(elite_four_type.time_delay).to eq(Duration.hours_in_seconds(24))
 
       champion_type = fight_type_repo.fight_types.where(code: 'champion').one!
       expect(champion_type.time_delay).to eq(Duration.hours_in_seconds(24))
