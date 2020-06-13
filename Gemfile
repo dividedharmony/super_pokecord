@@ -4,6 +4,7 @@ ruby File.read('.ruby-version', mode: 'rb').chomp
 gem 'dotenv'
 gem 'discordrb'
 gem 'dry-monads'
+gem 'i18n'
 
 # database
 gem 'rom'

@@ -2,6 +2,7 @@
 
 require 'dotenv/load'
 require 'discordrb'
+require 'i18n'
 
 require_relative './lib/pokecord/wild_pokemon'
 require_relative './lib/pokecord/starter_pokemons'
@@ -13,6 +14,9 @@ require_relative './lib/pokecord/commands/nickname'
 require_relative './lib/pokecord/commands/list_pokemons'
 
 EMBED_COLOR = '#34d8eb'
+
+I18n.load_path << Dir[File.expand_path("config/locales") + "/*.yml"]
+I18n.default_locale = :en
 
 bot = Discordrb::Commands::CommandBot.new(
   token: ENV["DISCORD_TOKEN"],

@@ -143,6 +143,7 @@ DEPENDENCIES
   discordrb
   dotenv
   dry-monads
+  i18n
   pg
   rake
   rom

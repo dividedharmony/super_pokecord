@@ -2,10 +2,14 @@
 
 require 'dotenv/load'
 require 'discordrb'
+require 'i18n'
 
 require_relative './lib/pokecord/spawn_rate'
 require_relative './lib/pokecord/wild_pokemon'
 require_relative './lib/pokecord/step_counter'
+
+I18n.load_path << Dir[File.expand_path("config/locales") + "/*.yml"]
+I18n.default_locale = :en
 
 bot = Discordrb::Bot.new(token: ENV["DISCORD_TOKEN"])
 
