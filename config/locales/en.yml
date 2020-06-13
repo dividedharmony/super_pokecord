@@ -26,4 +26,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  test: "This is a test"
+  user_needs_to_start: It looks like you haven't started your Pokemon journey yet! Use `p!start` to pick your starting Pokemon!
+  needs_a_current_pokemon: It looks like you don't have Pokemon selected. Use `p!pokemon` to view all your Pokemon and `p!select` to choose which one you want.
+  fight:
+    incorrect_code: I don't recognize that name. Correct usage of this command is `p!fight [rando | rival | gym | elite_four | champion]`.
+    not_available_yet: "Sorry, you've already fought %{name}. Wait %{time} until you can fight them again."
+    success: "You won against %{name}! You got **%{currency}** credits for winning!"
