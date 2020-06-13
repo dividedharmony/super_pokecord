@@ -5,6 +5,7 @@ gem 'dotenv'
 gem 'discordrb'
 gem 'dry-monads'
 gem 'i18n'
+gem 'faker'
 
 # database
 gem 'rom'
