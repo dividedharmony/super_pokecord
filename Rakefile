@@ -12,6 +12,7 @@ namespace :db do
     Rake::Task['pokecord:populate_pokemon'].execute
     Rake::Task['pokecord:populate_starters'].execute
     Rake::Task['pokecord:populate_galar_pokemon'].execute
+    Rake::Task['pokecord:populate_fight_types'].execute
   end
 
   namespace :test do
@@ -56,6 +57,11 @@ namespace :pokecord do
   task :populate_required_exp do
     require_relative './lib/taskers/populate_required_exp'
     Taskers::PopulateRequiredExp.new.call
+  end
+
+  task :populate_fight_types do
+    require_relative './lib/taskers/populate_fight_types'
+    Taskers::PopulateFightTypes.new.call
   end
 
   task :reset_users_exp_per_step do
