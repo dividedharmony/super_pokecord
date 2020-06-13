@@ -12,5 +12,14 @@ class Duration
     def minutes_in_seconds(number_of_minutes)
       number_of_minutes * ONE_MINUTE_IN_SECONDS
     end
+
+    def countdown_string(future_time)
+      diff_in_seconds = (future_time - Time.now).to_i
+      num_hours = diff_in_seconds / ONE_HOUR_IN_SECONDS
+      num_minutes = (diff_in_seconds % ONE_HOUR_IN_SECONDS) / ONE_MINUTE_IN_SECONDS
+      num_seconds = (diff_in_seconds % ONE_HOUR_IN_SECONDS) % ONE_MINUTE_IN_SECONDS
+
+      "#{num_hours}h #{num_minutes}m #{num_seconds}s"
+    end
   end
 end
