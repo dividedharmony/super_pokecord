@@ -12,6 +12,7 @@ namespace :db do
     Rake::Task['pokecord:populate_pokemon'].execute
     Rake::Task['pokecord:populate_starters'].execute
     Rake::Task['pokecord:populate_galar_pokemon'].execute
+    Rake::Task['pokecord:populate_rarity'].execute
     Rake::Task['pokecord:populate_fight_types'].execute
   end
 
@@ -37,6 +38,12 @@ namespace :pokecord do
     require_relative './lib/taskers/populate_pokemon_from_csv'
     galar_file = File.expand_path('pokemon_info/galar_pokedex.csv', File.dirname(__FILE__))
     Taskers::PopulatePokemonFromCsv.new(galar_file).call
+  end
+
+  task :populate_rarity do
+    require_relative './lib/taskers/populate_rarity'
+    rarity_file = File.expand_path('pokemon_info/rarity.csv', File.dirname(__FILE__))
+    Taskers::PopulateRarity.new(rarity_file).call
   end
 
   task :populate_catch_numbers do

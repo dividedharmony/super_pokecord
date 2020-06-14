@@ -1,0 +1,6 @@
+pokedex_number,name,starter,rarity_enum
+1,Bulbasaur,TRUE,0
+2,Ivysaur,FALSE,1
+3,Venusaur,FALSE,2
+4,Charmander,TRUE,3
+5,Charmeleon,FALSE,4
