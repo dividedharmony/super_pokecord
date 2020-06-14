@@ -11,6 +11,7 @@ require_relative './lib/pokecord/commands/catch'
 require_relative './lib/pokecord/commands/select'
 require_relative './lib/pokecord/commands/info'
 require_relative './lib/pokecord/commands/nickname'
+require_relative './lib/pokecord/commands/fight'
 require_relative './lib/pokecord/commands/list_pokemons'
 
 EMBED_COLOR = '#34d8eb'
@@ -177,6 +178,19 @@ bot.command(:nickname) do |event, *words|
     else
       spawn = nickname_cmd.call
       "#{event.user.mention}, you have successfully named your Pokemon \"**#{spawn.nickname}**\""
+    end
+  end
+end
+
+bot.command(:fight) do |event, fight_code|
+  if fight_code.nil?
+    I18n.t('fight.incorrect_code')
+  else
+    fight_result = Pokecord::Commands::Fight.new(event.user.id.to_s, fight_code).call
+    if fight_result.success?
+      "#{event.user.mention}, #{fight_result.value!}"
+    else
+      fight_result.failure
     end
   end
 end
