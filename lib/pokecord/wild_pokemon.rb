@@ -6,11 +6,11 @@ require_relative '../repositories/spawned_pokemon_repo'
 
 require_relative './random_levels'
 require_relative './exp_curve'
+require_relative './rarity'
 
 module Pokecord
   class WildPokemon
-    def initialize(rand_proc = nil)
-      @rand_proc = rand_proc || Proc.new { |x| rand(x) }
+    def initialize
       @poke_repo = Repositories::PokemonRepo.new(
         Db::Connection.registered_container
       )
@@ -29,7 +29,7 @@ module Pokecord
     end
 
     def pic_file
-      picture_number = pokedex_number.to_s.rjust(3, '0')
+      picture_number = random_pokemon.pokedex_number.to_s.rjust(3, '0')
       File.expand_path(
         "../../pokemon_info/images/#{picture_number}.png", File.dirname(__FILE__)
       )
@@ -42,15 +42,8 @@ module Pokecord
                 :spawn_repo,
                 :spawned_pokemon
 
-    def pokedex_number
-      @_pokedex_number ||= rand_proc.call(max_pokedex_number) + 1
-    end
-
     def random_pokemon
-      @_random_pokemon ||=  poke_repo.
-        pokemons.
-        where(pokedex_number: pokedex_number).
-        one!
+      @_random_pokemon ||=  Pokecord::Rarity.new.random_pokemon
     end
 
     def random_level
@@ -59,10 +52,6 @@ module Pokecord
 
     def required_exp
       Pokecord::ExpCurve.new(random_level).required_exp_for_next_level
-    end
-
-    def max_pokedex_number
-      poke_repo.pokemons.max(:pokedex_number)
     end
   end
 end

@@ -4,18 +4,19 @@ require_relative '../../lib/pokecord/wild_pokemon'
 
 RSpec.describe Pokecord::WildPokemon do
   describe '#spawn!' do
-    let(:rand_proc) { Proc.new { |_| 15 } }
     let(:spawn_repo) do
       Repositories::SpawnedPokemonRepo.new(
         Db::Connection.registered_container
       )
     end
 
-    subject { described_class.new(rand_proc).spawn! }
+    subject { described_class.new.spawn! }
 
     before do
-      # number returned by proc  + 1
-      TestingFactory[:pokemon, pokedex_number: 16]
+      pokemon = TestingFactory[:pokemon, pokedex_number: 16]
+      mock_rarity = instance_double(Pokecord::Rarity)
+      expect(Pokecord::Rarity).to receive(:new) { mock_rarity }
+      expect(mock_rarity).to receive(:random_pokemon) { pokemon }
     end
 
     it 'returns a spawn of the "randomly" selected pokemon' do
@@ -31,15 +32,19 @@ RSpec.describe Pokecord::WildPokemon do
   end
 
   describe '#pic_file' do
-    let(:rand_proc) { Proc.new { |_| 2 } }
-    let(:wild_pokemon) { described_class.new(rand_proc) }
+    let(:wild_pokemon) { described_class.new }
+    let(:mock_rarity) { instance_double(Pokecord::Rarity) }
 
     subject { wild_pokemon.pic_file }
 
+    before do
+      expect(Pokecord::Rarity).to receive(:new) { mock_rarity }
+    end
+
     context 'if the pokedex_number has a single digit' do
       before do
-        # number returned by proc  + 1
-        TestingFactory[:pokemon, pokedex_number: 3]
+        pokemon = TestingFactory[:pokemon, pokedex_number: 3]
+        expect(mock_rarity).to receive(:random_pokemon) { pokemon }
       end
 
       # resulting string is zero-padded
@@ -47,11 +52,9 @@ RSpec.describe Pokecord::WildPokemon do
     end
 
     context 'if the pokedex_number has a double digits' do
-      let(:rand_proc) { Proc.new { |_| 23 } }
-
       before(:each) do
-        # number returned by proc  + 1
-        TestingFactory[:pokemon, pokedex_number: 24]
+        pokemon = TestingFactory[:pokemon, pokedex_number: 24]
+        expect(mock_rarity).to receive(:random_pokemon) { pokemon }
       end
 
       # resulting string is zero-padded
@@ -59,11 +62,9 @@ RSpec.describe Pokecord::WildPokemon do
     end
 
     context 'if the pokedex_number has a triple digits' do
-      let(:rand_proc) { Proc.new { |_| 764 } }
-
       before(:each) do
-        # number returned by proc  + 1
-        TestingFactory[:pokemon, pokedex_number: 765]
+        pokemon = TestingFactory[:pokemon, pokedex_number: 765]
+        expect(mock_rarity).to receive(:random_pokemon) { pokemon }
       end
 
       # no zero-padding
