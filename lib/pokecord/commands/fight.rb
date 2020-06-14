@@ -10,6 +10,7 @@ require_relative '../../repositories/user_repo'
 
 require_relative '../../duration'
 require_relative '../fight_conditions'
+require_relative '../npc_name'
 
 module Pokecord
   module Commands
@@ -42,7 +43,8 @@ module Pokecord
         update_user_cmd.call(current_balance: new_balance)
         update_event_cmd = fight_event_repo.fight_events.by_pk(fight_event.id).command(:update)
         update_event_cmd.call(last_fought_at: Time.now, available_at: next_available_at)
-        Success(I18n.t('fight.success', name: 'Trainer Bob', currency: currency_award))
+        name = Pokecord::NpcName.new(fight_type.code).to_s
+        Success(I18n.t('fight.success', name: name, currency: currency_award))
       end
 
       private

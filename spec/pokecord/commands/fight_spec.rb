@@ -145,6 +145,9 @@ RSpec.describe Pokecord::Commands::Fight do
         mock_conditions = instance_double(Pokecord::FightConditions)
         expect(Pokecord::FightConditions).to receive(:new).with(any_args) { mock_conditions }
         expect(mock_conditions).to receive(:met?) { true }
+        mock_npc_name = instance_double(Pokecord::NpcName)
+        expect(Pokecord::NpcName).to receive(:new).with('gym') { mock_npc_name }
+        expect(mock_npc_name).to receive(:to_s) { 'Lady Amanda' }
       end
 
       context 'if user has never participated in this fight type before' do
@@ -158,7 +161,7 @@ RSpec.describe Pokecord::Commands::Fight do
           user_reload = user_repo.users.by_pk(user.id).one!
           expect(user_reload.current_balance).to eq(11_020)
           expect(subject.value!).to eq(
-            I18n.t('fight.success', name: 'Trainer Bob', currency: 11_000)
+            I18n.t('fight.success', name: 'Lady Amanda', currency: 11_000)
           )
         end
       end
@@ -184,7 +187,7 @@ RSpec.describe Pokecord::Commands::Fight do
           user_reload = user_repo.users.by_pk(user.id).one!
           expect(user_reload.current_balance).to eq(11_020)
           expect(subject.value!).to eq(
-            I18n.t('fight.success', name: 'Trainer Bob', currency: 11_000)
+            I18n.t('fight.success', name: 'Lady Amanda', currency: 11_000)
           )
         end
       end
