@@ -22,6 +22,8 @@ require_relative '../db/connection'
 require 'database_cleaner/sequel'
 require 'rom/factory'
 require 'timecop'
+require 'pry'
+require 'awesome_print'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
