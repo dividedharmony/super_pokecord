@@ -21,3 +21,7 @@ group :test do
   gem 'rom-factory'
   gem 'timecop'
 end
+
+group :test, :development do
+  gem 'pry', '~> 0.12.2'
+end
