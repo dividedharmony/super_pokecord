@@ -103,8 +103,8 @@ RSpec.describe Pokecord::Commands::Fight do
         expect(result).to eq(
           I18n.t(
             'fight.not_available_yet',
-            name: 'Trainer Bob',
-            time: '3h 48m 2s'
+            name: 'gym',
+            time: '3h 48m 1s'
           )
         )
       end

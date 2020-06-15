@@ -18,6 +18,7 @@ require 'dotenv'
 
 Dotenv.load('.env.test')
 
+require 'i18n'
 require_relative '../db/connection'
 require 'database_cleaner/sequel'
 require 'rom/factory'
@@ -67,6 +68,9 @@ RSpec.configure do |config|
     end
 
     Dir[File.dirname(__FILE__) + '/support/factories/*.rb'].each { |file| require file }
+
+    I18n.load_path << Dir[File.expand_path("config/locales") + "/*.yml"]
+    I18n.default_locale = :en
   end
 
   config.before(:each) do
