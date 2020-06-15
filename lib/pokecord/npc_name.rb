@@ -199,14 +199,17 @@ module Pokecord
       'Model'
     ].freeze
 
-    def initialize(fight_code)
+    def initialize(fight_code, user = nil)
       @fight_code = fight_code
+      @user = user
       @name = Faker::Name.first_name
     end
 
     def to_s
       case fight_code
-      when 'rival' then 'your rival ???'
+      when 'rival'
+        rival_name = user&.rival_name || '???'
+        "your rival #{rival_name}"
       when 'gym' then "Gym Leader #{name}"
       when 'elite_four' then "Elite Four #{name}"
       when 'champion' then "Pokemon Champion #{name}"
@@ -217,6 +220,6 @@ module Pokecord
 
     private
 
-    attr_reader :fight_code, :name
+    attr_reader :fight_code, :user, :name
   end
 end

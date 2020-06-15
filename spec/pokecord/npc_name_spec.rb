@@ -11,7 +11,25 @@ RSpec.describe Pokecord::NpcName do
     context 'if the given fight_code is "rival"' do
       let(:fight_code) { 'rival' }
 
-      it { is_expected.to eq('your rival ???') }
+      context 'if user is nil' do
+        it { is_expected.to eq('your rival ???') }
+      end
+
+      context 'if user is present' do
+        let(:npc_name) { described_class.new(fight_code, user) }
+
+        context 'if user has not named their rival' do
+          let(:user) { TestingFactory[:user, rival_name: nil] }
+
+          it { is_expected.to eq('your rival ???') }
+        end
+
+        context 'if user has named their rival' do
+          let(:user) { TestingFactory[:user, rival_name: 'Blue'] }
+
+          it { is_expected.to eq('your rival Blue') }
+        end
+      end
     end
 
     context 'if the given fight_code is "gym"' do

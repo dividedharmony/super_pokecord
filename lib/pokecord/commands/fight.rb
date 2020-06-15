@@ -43,7 +43,7 @@ module Pokecord
         update_user_cmd.call(current_balance: new_balance)
         update_event_cmd = fight_event_repo.fight_events.by_pk(fight_event.id).command(:update)
         update_event_cmd.call(last_fought_at: Time.now, available_at: next_available_at)
-        name = Pokecord::NpcName.new(fight_type.code).to_s
+        name = Pokecord::NpcName.new(fight_type.code, user).to_s
         Success(I18n.t('fight.success', name: name, currency: currency_award))
       end
 

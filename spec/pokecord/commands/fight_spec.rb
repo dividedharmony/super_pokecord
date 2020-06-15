@@ -146,7 +146,7 @@ RSpec.describe Pokecord::Commands::Fight do
         expect(Pokecord::FightConditions).to receive(:new).with(any_args) { mock_conditions }
         expect(mock_conditions).to receive(:met?) { true }
         mock_npc_name = instance_double(Pokecord::NpcName)
-        expect(Pokecord::NpcName).to receive(:new).with('gym') { mock_npc_name }
+        expect(Pokecord::NpcName).to receive(:new).with('gym', duck_type(:rival_name)) { mock_npc_name }
         expect(mock_npc_name).to receive(:to_s) { 'Lady Amanda' }
       end
 
