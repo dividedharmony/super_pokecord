@@ -7,6 +7,7 @@ require 'rom-sql'
 require_relative '../lib/persistence/relations/users'
 require_relative '../lib/persistence/relations/pokemons'
 require_relative '../lib/persistence/relations/spawned_pokemons'
+require_relative '../lib/persistence/relations/evolutions'
 require_relative '../lib/persistence/relations/fight_types'
 require_relative '../lib/persistence/relations/fight_events'
 
@@ -26,6 +27,7 @@ module Db
             Persistence::Relations::Users,
             Persistence::Relations::Pokemons,
             Persistence::Relations::SpawnedPokemons,
+            Persistence::Relations::Evolutions,
             Persistence::Relations::FightTypes,
             Persistence::Relations::FightEvents
           )
