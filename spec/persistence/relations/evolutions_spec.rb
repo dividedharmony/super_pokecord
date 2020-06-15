@@ -56,4 +56,23 @@ RSpec.describe Persistence::Relations::Evolutions do
       end
     end
   end
+
+  describe 'auto-struct' do
+    let!(:evolution) do
+      TestingFactory[:evolution]
+    end
+    let(:evolution_repo) do
+      Repositories::EvolutionRepo.new(
+        Db::Connection.registered_container
+      )
+    end
+
+    subject do
+      evolution_repo.evolutions.by_pk(evolution.id).one!
+    end
+
+    it 'auto-structs as a Entities::Evolution' do
+      expect(subject).to be_a(Entities::Evolution)
+    end
+  end
 end
