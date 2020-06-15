@@ -17,6 +17,14 @@ namespace :db do
   end
 
   namespace :test do
+    task :clean do
+      require 'dotenv'
+      Dotenv.load('.env.test')
+      require_relative './db/connection'
+      ROM::SQL::RakeSupport.env = Db::Connection.container
+      Rake::Task['db:clean'].execute
+    end
+
     task :setup do
       require 'dotenv'
       Dotenv.load('.env.test')
