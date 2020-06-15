@@ -11,6 +11,7 @@ require_relative './lib/pokecord/commands/catch'
 require_relative './lib/pokecord/commands/select'
 require_relative './lib/pokecord/commands/info'
 require_relative './lib/pokecord/commands/nickname'
+require_relative './lib/pokecord/commands/name_rival'
 require_relative './lib/pokecord/commands/fight'
 require_relative './lib/pokecord/commands/list_pokemons'
 
@@ -178,6 +179,20 @@ bot.command(:nickname) do |event, *words|
     else
       spawn = nickname_cmd.call
       "#{event.user.mention}, you have successfully named your Pokemon \"**#{spawn.nickname}**\""
+    end
+  end
+end
+
+bot.command(:namerival) do |event, *words|
+  if words.length.zero?
+    I18n.t('name_rival.argument_error')
+  else
+    rival_name = words.join(' ')
+    naming_result = Pokecord::Commands::NameRival.new(event.user.id.to_s, rival_name).call
+    if naming_result.success?
+      "#{event.user.mention} #{naming_result.value!}"
+    else
+      naming_result.failure
     end
   end
 end
