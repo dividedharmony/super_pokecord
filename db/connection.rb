@@ -10,6 +10,7 @@ require_relative '../lib/persistence/relations/spawned_pokemons'
 require_relative '../lib/persistence/relations/evolutions'
 require_relative '../lib/persistence/relations/fight_types'
 require_relative '../lib/persistence/relations/fight_events'
+require_relative '../lib/persistence/relations/products'
 
 module Db
   class Connection
@@ -29,7 +30,8 @@ module Db
             Persistence::Relations::SpawnedPokemons,
             Persistence::Relations::Evolutions,
             Persistence::Relations::FightTypes,
-            Persistence::Relations::FightEvents
+            Persistence::Relations::FightEvents,
+            Persistence::Relations::Products
           )
           ROM.container(configuration)
         end

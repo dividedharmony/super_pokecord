@@ -9,6 +9,7 @@ module Persistence
         associations do
           belongs_to :pokemon, foreign_key: :evolves_from_id, as: :evolves_from
           belongs_to :pokemon, foreign_key: :evolves_into_id, as: :evolves_into
+          belongs_to :product
         end
       end
 

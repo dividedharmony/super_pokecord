@@ -55,6 +55,45 @@ RSpec.describe Persistence::Relations::Evolutions do
         expect(subject.evolves_into.id).to eq(pokemon_evolves_into.id)
       end
     end
+
+    describe '#product' do
+      let(:evolution_repo) do
+        Repositories::EvolutionRepo.new(
+          Db::Connection.registered_container
+        )
+      end
+
+      subject do
+        evolution_repo.evolutions.combine(:product).by_pk(evolution.id).one!
+      end
+
+      context 'if product_id is nil' do
+        let!(:evolution) do
+          TestingFactory[
+            :evolution,
+            product_id: nil
+          ]
+        end
+
+        it 'is nil' do
+          expect(subject.product).to be_nil
+        end
+      end
+
+      context 'if product_id is present' do
+        let!(:product) { TestingFactory[:product] }
+        let!(:evolution) do
+          TestingFactory[
+            :evolution,
+            product_id: product.id
+          ]
+        end
+
+        it 'belongs_to a product' do
+          expect(subject.product.id).to eq(product.id)
+        end
+      end
+    end
   end
 
   describe 'auto-struct' do
