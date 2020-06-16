@@ -6,7 +6,8 @@ module Entities
   class Evolution < ROM::Struct
     TRIGGERS = [
       :level_up,
-      :item
+      :item,
+      :trade
     ].freeze
 
     def triggered_by

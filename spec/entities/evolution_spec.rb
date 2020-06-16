@@ -31,5 +31,11 @@ RSpec.describe Entities::Evolution do
 
       it { is_expected.to eq(:item) }
     end
+
+    context 'if trigger_enum is 2' do
+      let!(:evolution) { TestingFactory[:evolution, trigger_enum: 2] }
+
+      it { is_expected.to eq(:trade) }
+    end
   end
 end
