@@ -5,7 +5,8 @@ require 'rom/struct'
 module Entities
   class Evolution < ROM::Struct
     TRIGGERS = [
-      :level_up
+      :level_up,
+      :item
     ].freeze
 
     def triggered_by

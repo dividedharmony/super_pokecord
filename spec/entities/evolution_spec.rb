@@ -11,18 +11,25 @@ RSpec.describe Entities::Evolution do
   end
 
   describe '#trigger' do
+    let!(:evolution_entity) do
+      evolution_repo.
+        evolutions.
+        by_pk(evolution.id).
+        one!
+    end
+
     subject { evolution_entity.triggered_by }
 
     context 'if trigger_enum is 0' do
       let!(:evolution) { TestingFactory[:evolution, trigger_enum: 0] }
-      let!(:evolution_entity) do
-        evolution_repo.
-          evolutions.
-          by_pk(evolution.id).
-          one!
-      end
 
       it { is_expected.to eq(:level_up) }
+    end
+
+    context 'if trigger_enum is 1' do
+      let!(:evolution) { TestingFactory[:evolution, trigger_enum: 1] }
+
+      it { is_expected.to eq(:item) }
     end
   end
 end
