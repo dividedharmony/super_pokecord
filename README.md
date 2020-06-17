@@ -4,7 +4,7 @@ A ruby project meant to emulate the now dead Pokecord discord bot.
 
 ### TODO list
 
-- [ ] Populate products table
+- [x] Populate products table
 - [ ] Change Ultra Beast rarity
 - [ ] Import evolutions.csv
 - [ ] Add command-line tool for changing fight_type rewards

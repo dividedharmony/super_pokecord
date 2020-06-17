@@ -14,6 +14,7 @@ namespace :db do
     Rake::Task['pokecord:populate_galar_pokemon'].execute
     Rake::Task['pokecord:populate_rarity'].execute
     Rake::Task['pokecord:populate_fight_types'].execute
+    Rake::Task['pokecord:populate_products'].execute
   end
 
   namespace :test do
@@ -82,5 +83,10 @@ namespace :pokecord do
   task :reset_users_exp_per_step do
     require_relative './lib/taskers/reset_users_exp_per_step'
     Taskers::ResetUsersExpPerStep.new.call
+  end
+
+  task :populate_products do
+    require_relative './lib/taskers/populate_products'
+    Taskers::PopulateProducts.new.call
   end
 end
