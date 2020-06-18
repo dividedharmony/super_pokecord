@@ -15,6 +15,7 @@ namespace :db do
     Rake::Task['pokecord:populate_rarity'].execute
     Rake::Task['pokecord:populate_fight_types'].execute
     Rake::Task['pokecord:populate_products'].execute
+    Rake::Task['pokecord:populate_evolutions'].execute
   end
 
   namespace :test do
@@ -88,5 +89,11 @@ namespace :pokecord do
   task :populate_products do
     require_relative './lib/taskers/populate_products'
     Taskers::PopulateProducts.new.call
+  end
+
+  task :populate_evolutions do
+    require_relative './lib/taskers/populate_evolutions'
+    evolutions_file = File.expand_path('pokemon_info/evolutions.csv', File.dirname(__FILE__))
+    Taskers::PopulateEvolutions.new(evolutions_file).call
   end
 end
