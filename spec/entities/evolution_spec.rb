@@ -10,7 +10,7 @@ RSpec.describe Entities::Evolution do
     )
   end
 
-  describe '#trigger' do
+  describe '#triggered_by' do
     let!(:evolution_entity) do
       evolution_repo.
         evolutions.
@@ -36,6 +36,47 @@ RSpec.describe Entities::Evolution do
       let!(:evolution) { TestingFactory[:evolution, trigger_enum: 2] }
 
       it { is_expected.to eq(:trade) }
+    end
+  end
+
+  describe 'prerequisite' do
+    let!(:evolution_entity) do
+      evolution_repo.
+        evolutions.
+        by_pk(evolution.id).
+        one!
+    end
+
+    subject { evolution_entity.prerequisite }
+
+    context 'if prerequisites_enum is 0' do
+      let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: 0] }
+
+      it { is_expected.to eq(Pokecord::EvolutionPrerequisites::Day) }
+    end
+
+    context 'if prerequisites_enum is 1' do
+      let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: 1] }
+
+      it { is_expected.to eq(Pokecord::EvolutionPrerequisites::Night) }
+    end
+
+    context 'if prerequisites_enum is 2' do
+      let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: 2] }
+
+      it { is_expected.to eq(Pokecord::EvolutionPrerequisites::Male) }
+    end
+
+    context 'if prerequisites_enum is 3' do
+      let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: 3] }
+
+      it { is_expected.to eq(Pokecord::EvolutionPrerequisites::Female) }
+    end
+
+    context 'if prerequisites_enum is 4' do
+      let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: 4] }
+
+      it { is_expected.to eq(Pokecord::EvolutionPrerequisites::HoldingAnItem) }
     end
   end
 end
