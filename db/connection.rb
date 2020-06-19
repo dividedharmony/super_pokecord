@@ -11,6 +11,7 @@ require_relative '../lib/persistence/relations/evolutions'
 require_relative '../lib/persistence/relations/fight_types'
 require_relative '../lib/persistence/relations/fight_events'
 require_relative '../lib/persistence/relations/products'
+require_relative '../lib/persistence/relations/trades'
 
 module Db
   class Connection
@@ -31,7 +32,8 @@ module Db
             Persistence::Relations::Evolutions,
             Persistence::Relations::FightTypes,
             Persistence::Relations::FightEvents,
-            Persistence::Relations::Products
+            Persistence::Relations::Products,
+            Persistence::Relations::Trades
           )
           ROM.container(configuration)
         end
