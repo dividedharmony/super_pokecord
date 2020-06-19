@@ -8,10 +8,11 @@ require_relative './evolve'
 
 module Pokecord
   class ExpApplier
-    LevelUpPayload = Struct.new(:spawned_pokemon, :level, :evolved_into)
+    LevelUpPayload = Struct.new(:spawned_pokemon, :level, :initial_pokemon, :evolved_into)
 
     def initialize(spawned_pokemon, incoming_exp)
       @spawned_pokemon = spawned_pokemon
+      @initial_pokemon = spawned_pokemon.pokemon
       @incoming_exp = incoming_exp
       @current_level = spawned_pokemon.level
       @spawn_repo = Repositories::SpawnedPokemonRepo.new(
@@ -45,12 +46,18 @@ module Pokecord
 
     def payload
       return nil unless leveled_up
-      LevelUpPayload.new(spawned_pokemon, current_level, evolved_into)
+      LevelUpPayload.new(reloaded_spawn, current_level, initial_pokemon, evolved_into)
     end
 
     private
 
-    attr_reader :spawned_pokemon, :incoming_exp, :spawn_repo, :current_level, :leveled_up, :evolved_into
+    attr_reader :spawned_pokemon,
+                :initial_pokemon,
+                :incoming_exp,
+                :spawn_repo,
+                :current_level,
+                :leveled_up,
+                :evolved_into
 
     def update_command
       spawn_repo.
@@ -59,8 +66,8 @@ module Pokecord
         command(:update)
     end
 
-    def reload!
-      @spawned_pokemon = spawn_repo.
+    def reloaded_spawn
+      spawn_repo.
         spawned_pokemons.
         combine(:pokemon).
         where(id: spawned_pokemon.id).

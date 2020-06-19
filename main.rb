@@ -24,7 +24,7 @@ bot.message(containing: not!("p!"), in: poke_channels) do |event|
   previous_discord_id = current_discord_id
   if level_up_payload
     current_poke_spawn = level_up_payload.spawned_pokemon
-    poke_name = current_poke_spawn.nickname || current_poke_spawn.pokemon.name
+    poke_name = current_poke_spawn.nickname || level_up_payload.initial_pokemon.name
     event.respond("Congrats, #{event.user.mention}! Your **#{poke_name}** has leveled up to #{level_up_payload.level}!")
     if level_up_payload.evolved_into
       event.respond("What's this? Your #{poke_name} has evolved into a **#{level_up_payload.evolved_into.name}**!!")
