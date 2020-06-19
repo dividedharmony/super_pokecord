@@ -71,6 +71,12 @@ RSpec.describe Entities::Evolution do
 
     subject { evolution_entity.prerequisite }
 
+    context 'if prerequisites_enum is nil' do
+      let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: nil] }
+
+      it { is_expected.to be_nil }
+    end
+
     context 'if prerequisites_enum is 0' do
       let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: 0] }
 
@@ -103,7 +109,6 @@ RSpec.describe Entities::Evolution do
   end
 
   describe '#prereq_fulfilled?' do
-    let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: 1] }
     let!(:evolution_entity) do
       evolution_repo.
         evolutions.
@@ -114,10 +119,32 @@ RSpec.describe Entities::Evolution do
 
     subject { evolution_entity.prereq_fulfilled?(spawned_pokemon) }
 
-    it 'passes the spawned_pokemon to the EvolutionPrerequisites class' do
-      expect(Pokecord::EvolutionPrerequisites::Night).
-        to receive(:call).with(spawned_pokemon, evolution_entity) { 'return value' }
-      expect(subject).to eq('return value')
+    context 'if evolution has no prerequisite' do
+      let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: nil] }
+
+      it { is_expected.to be true }
+    end
+
+    context 'if evolution has a prerequisite' do
+      let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: 1] }
+
+      context 'if prerequisites are not fulfilled' do
+        before do
+          expect(Pokecord::EvolutionPrerequisites::Night).
+            to receive(:call).with(spawned_pokemon, evolution_entity) { false }
+        end
+
+        it { is_expected.to be false }
+      end
+
+      context 'if prerequisites are fulfilled' do
+        before do
+          expect(Pokecord::EvolutionPrerequisites::Night).
+            to receive(:call).with(spawned_pokemon, evolution_entity) { true }
+        end
+
+        it { is_expected.to be true }
+      end
     end
   end
 end

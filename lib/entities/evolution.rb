@@ -22,10 +22,12 @@ module Entities
     end
 
     def prerequisite
+      return nil if prerequisites_enum.nil?
       Pokecord::EvolutionPrerequisites::TYPES_OF_PREREQUISITES[prerequisites_enum]
     end
 
     def prereq_fulfilled?(spawned_pokemon)
+      return true if prerequisite.nil?
       prerequisite.call(spawned_pokemon, self)
     end
   end
