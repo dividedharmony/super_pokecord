@@ -18,5 +18,9 @@ module Entities
     def prerequisite
       Pokecord::EvolutionPrerequisites::TYPES_OF_PREREQUISITES[prerequisites_enum]
     end
+
+    def prereq_fulfilled?(spawned_pokemon)
+      prerequisite.call(spawned_pokemon, self)
+    end
   end
 end

@@ -39,7 +39,7 @@ RSpec.describe Entities::Evolution do
     end
   end
 
-  describe 'prerequisite' do
+  describe '#prerequisite' do
     let!(:evolution_entity) do
       evolution_repo.
         evolutions.
@@ -77,6 +77,25 @@ RSpec.describe Entities::Evolution do
       let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: 4] }
 
       it { is_expected.to eq(Pokecord::EvolutionPrerequisites::HoldingAnItem) }
+    end
+  end
+
+  describe '#prereq_fulfilled?' do
+    let!(:evolution) { TestingFactory[:evolution, prerequisites_enum: 1] }
+    let!(:evolution_entity) do
+      evolution_repo.
+        evolutions.
+        by_pk(evolution.id).
+        one!
+    end
+    let(:spawned_pokemon) { double('spawned_pokemon') }
+
+    subject { evolution_entity.prereq_fulfilled?(spawned_pokemon) }
+
+    it 'passes the spawned_pokemon to the EvolutionPrerequisites class' do
+      expect(Pokecord::EvolutionPrerequisites::Night).
+        to receive(:call).with(spawned_pokemon, evolution_entity) { 'return value' }
+      expect(subject).to eq('return value')
     end
   end
 end
