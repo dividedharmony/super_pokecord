@@ -9,6 +9,7 @@ module Persistence
         associations do
           belongs_to :pokemon
           belongs_to :user
+          belongs_to :trade
         end
       end
 
