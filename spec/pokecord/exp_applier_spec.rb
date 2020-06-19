@@ -43,19 +43,58 @@ RSpec.describe Pokecord::ExpApplier do
         let(:incoming_exp) { 60 }
         let(:current_exp) { 740 }
         let(:required_exp) { 750 }
+        let(:mock_evolve) { instance_double(Pokecord::Evolve) }
 
-        it 'levels up the spawned_pokemon' do
-          expect { subject }.to change {
-            spawn_repo.spawned_pokemons.where(id: spawned_pokemon.id).one.level
-          }.from(10).to(11)
-          reloaded_spawn = spawn_repo.spawned_pokemons.where(id: spawned_pokemon.id).one
-          expect(reloaded_spawn.current_exp).to eq(50)
-          new_required_exp = Pokecord::ExpCurve.new(11).required_exp_for_next_level
-          expect(reloaded_spawn.required_exp).to eq(new_required_exp)
-          # the applier returns a payload
-          level_up_payload = exp_applier.payload
-          expect(level_up_payload.spawned_pokemon.id).to eq(reloaded_spawn.id)
-          expect(level_up_payload.level).to eq(11)
+        before do
+          expect(Pokecord::Evolve).
+            to receive(:new).
+            with(having_attributes(id: spawned_pokemon.id)) { mock_evolve }
+        end
+
+        context 'if leveling up causes pokemon to evolve' do
+          let(:evolved_pokemon) { TestingFactory[:pokemon] }
+
+          before do
+            expect(mock_evolve).
+              to receive(:call) { Dry::Monads::Result::Success.new(evolved_pokemon) }
+          end
+
+          it 'levels up and evolves the spawned_pokemon' do
+            expect { subject }.to change {
+              spawn_repo.spawned_pokemons.where(id: spawned_pokemon.id).one.level
+            }.from(10).to(11)
+            reloaded_spawn = spawn_repo.spawned_pokemons.where(id: spawned_pokemon.id).one
+            expect(reloaded_spawn.current_exp).to eq(50)
+            new_required_exp = Pokecord::ExpCurve.new(11).required_exp_for_next_level
+            expect(reloaded_spawn.required_exp).to eq(new_required_exp)
+            # the applier returns a payload
+            level_up_payload = exp_applier.payload
+            expect(level_up_payload.spawned_pokemon.id).to eq(reloaded_spawn.id)
+            expect(level_up_payload.level).to eq(11)
+            expect(level_up_payload.evolved_into.id).to eq(evolved_pokemon.id)
+          end
+        end
+
+        context 'if leveling up does not cause pokemon to evolve' do
+          before do
+            expect(mock_evolve).
+              to receive(:call) { Dry::Monads::Result::Failure.new(nil) }
+          end
+
+          it 'levels up and evolves the spawned_pokemon' do
+            expect { subject }.to change {
+              spawn_repo.spawned_pokemons.where(id: spawned_pokemon.id).one.level
+            }.from(10).to(11)
+            reloaded_spawn = spawn_repo.spawned_pokemons.where(id: spawned_pokemon.id).one
+            expect(reloaded_spawn.current_exp).to eq(50)
+            new_required_exp = Pokecord::ExpCurve.new(11).required_exp_for_next_level
+            expect(reloaded_spawn.required_exp).to eq(new_required_exp)
+            # the applier returns a payload
+            level_up_payload = exp_applier.payload
+            expect(level_up_payload.spawned_pokemon.id).to eq(reloaded_spawn.id)
+            expect(level_up_payload.level).to eq(11)
+            expect(level_up_payload.evolved_into).to be_nil
+          end
         end
       end
 

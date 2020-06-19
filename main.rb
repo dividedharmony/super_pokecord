@@ -26,6 +26,9 @@ bot.message(containing: not!("p!"), in: poke_channels) do |event|
     current_poke_spawn = level_up_payload.spawned_pokemon
     poke_name = current_poke_spawn.nickname || current_poke_spawn.pokemon.name
     event.respond("Congrats, #{event.user.mention}! Your **#{poke_name}** has leveled up to #{level_up_payload.level}!")
+    if level_up_payload.evolved_into
+      event.respond("What's this? Your #{poke_name} has evolved into a **#{level_up_payload.evolved_into.name}**!!")
+    end
   end
   # Spawn Logic
   spawn_rate.step!

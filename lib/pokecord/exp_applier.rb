@@ -4,10 +4,11 @@ require_relative '../../db/connection'
 require_relative '../repositories/spawned_pokemon_repo'
 
 require_relative './exp_curve'
+require_relative './evolve'
 
 module Pokecord
   class ExpApplier
-    LevelUpPayload = Struct.new(:spawned_pokemon, :level)
+    LevelUpPayload = Struct.new(:spawned_pokemon, :level, :evolved_into)
 
     def initialize(spawned_pokemon, incoming_exp)
       @spawned_pokemon = spawned_pokemon
@@ -17,6 +18,7 @@ module Pokecord
         Db::Connection.registered_container
       )
       @leveled_up = false
+      @evolved_into = nil
     end
 
     def apply!
@@ -27,11 +29,15 @@ module Pokecord
         @current_level += 1
         new_total_exp = total_exp - spawned_pokemon.required_exp
         new_required_exp = Pokecord::ExpCurve.new(@current_level).required_exp_for_next_level
-        update_command.call(
+        @spawned_pokemon = update_command.call(
           level: current_level,
           current_exp: new_total_exp,
           required_exp: new_required_exp
         )
+        evolve_result = Pokecord::Evolve.new(spawned_pokemon).call
+        evolve_result.fmap do |resulting_pokemon|
+          @evolved_into = resulting_pokemon
+        end
       else
         update_command.call(current_exp: total_exp)
       end
@@ -39,12 +45,12 @@ module Pokecord
 
     def payload
       return nil unless leveled_up
-      LevelUpPayload.new(spawned_pokemon, current_level)
+      LevelUpPayload.new(spawned_pokemon, current_level, evolved_into)
     end
 
     private
 
-    attr_reader :spawned_pokemon, :incoming_exp, :spawn_repo, :current_level, :leveled_up
+    attr_reader :spawned_pokemon, :incoming_exp, :spawn_repo, :current_level, :leveled_up, :evolved_into
 
     def update_command
       spawn_repo.
