@@ -11,6 +11,12 @@ module Entities
       :trade
     ].freeze
 
+    class << self
+      def enum_value(trigger_name)
+        TRIGGERS.index(trigger_name)
+      end
+    end
+
     def triggered_by
       TRIGGERS[trigger_enum]
     end

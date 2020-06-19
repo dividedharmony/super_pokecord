@@ -10,6 +10,28 @@ RSpec.describe Entities::Evolution do
     )
   end
 
+  describe '.enum_value' do
+    subject { described_class.enum_value(trigger_name) }
+
+    context 'if trigger_name is :level_up' do
+      let(:trigger_name) { :level_up }
+
+      it { is_expected.to eq(0) }
+    end
+
+    context 'if trigger_name is :item' do
+      let(:trigger_name) { :item }
+
+      it { is_expected.to eq(1) }
+    end
+
+    context 'if trigger_name is :level_up' do
+      let(:trigger_name) { :trade }
+
+      it { is_expected.to eq(2) }
+    end
+  end
+
   describe '#triggered_by' do
     let!(:evolution_entity) do
       evolution_repo.
