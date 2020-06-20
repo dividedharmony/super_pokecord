@@ -13,6 +13,7 @@ require_relative './lib/pokecord/commands/info'
 require_relative './lib/pokecord/commands/nickname'
 require_relative './lib/pokecord/commands/name_rival'
 require_relative './lib/pokecord/commands/fight'
+require_relative './lib/pokecord/commands/initiate_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
 
 EMBED_COLOR = '#34d8eb'
@@ -210,6 +211,26 @@ bot.command(:fight) do |event, fight_code|
   end
 end
 
+bot.command(:trade) do |event, subcommand, arg1|
+  if subcommand.nil?
+    I18n.t('trade.subcommand_error')
+  else
+    case subcommand
+    when 'with'
+      result = Pokecord::Command::InitiateTrade.new(event.user.id.to_s, arg1).call
+      if result.success?
+        "#{arg1}, you have been invited to trade with #{event.user.mention}. You can accept the invitation with `p!accept`."
+      else
+        result.failure
+      end
+    when 'add' then I18n.t('trade.subcommand_not_implemented')
+    when 'remove' then I18n.t('trade.subcommand_not_implemented')
+    else
+      I18n.t('trade.subcommand_error')
+    end
+  end
+end
+
 %w{
   order
   hint
@@ -231,7 +252,6 @@ end
   balance
   bal
   market
-  trade
   p
   cancel
   daily
