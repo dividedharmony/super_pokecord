@@ -247,24 +247,4 @@ end
   end
 end
 
-bot.command(:emily, permission_level: 2) do |event, given_page_num|
-  one_indexed_page_num = given_page_num || 1
-  actual_page_num = one_indexed_page_num - 1
-  list_cmd = Pokecord::Commands::ListPokemons.new(
-    ENV['EMILY_ID'],
-    actual_page_num
-  )
-  event.channel.send_embed do |embed|
-    embed.color = EMBED_COLOR
-    embed.title = "Pokemon caught by Emily Harmon"
-    embed.description = list_cmd.to_a.map do |spawn|
-      poke = spawn.pokemon
-      "**#{poke.name}:** Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
-    end.join("\n")
-    embed.footer = Discordrb::Webhooks::EmbedFooter.new(
-      text: "Displaying page #{one_indexed_page_num} of #{list_cmd.total_pages}"
-    )
-  end
-end
-
 bot.run
