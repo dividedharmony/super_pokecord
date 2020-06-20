@@ -32,6 +32,7 @@ module Pokecord
       def call
         user_1 = yield get_user_1
         user_2 = yield parse_user_2
+        yield validate_not_the_same_user(user_1, user_2)
         yield validate_no_pending_trades(user_1, user_2)
 
         trade = trade_repo.create(
@@ -77,6 +78,14 @@ module Pokecord
           pending_trade = user_2_pending.first
           wait_time = Duration.countdown_string(pending_trade.expires_at)
           Failure(I18n.t('initiate_trade.user_2_in_pending_trade', time: wait_time))
+        else
+          Success()
+        end
+      end
+
+      def validate_not_the_same_user(user_1, user_2)
+        if user_1.id == user_2.id
+          Failure(I18n.t('initiate_trade.must_be_different_users'))
         else
           Success()
         end

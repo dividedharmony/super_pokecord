@@ -57,58 +57,74 @@ RSpec.describe Pokecord::Commands::InitiateTrade do
             to receive(:call) { Dry::Monads::Result::Success.new(user_2) }
         end
 
-        context 'if user_1 has pending trades' do
-          let!(:previous_trade) { TestingFactory[:trade, user_1_id: user_1.id] }
-
-          before do
-            expect(Duration).
-            to receive(:countdown_string).
-            with(instance_of(Time)) { '24h 14m 31s' }
-          end
+        context 'if user_1 and user_2 are the same user' do
+          let!(:user_2) { user_1 }
 
           it 'returns a failure monad' do
             expect { subject }.not_to change {
               trade_repo.trades.count
-            }.from(1)
+            }.from(0)
             expect(subject).to be_failure
             expect(subject.failure).to eq(
-              I18n.t('initiate_trade.user_1_in_pending_trade', time: '24h 14m 31s')
+              I18n.t('initiate_trade.must_be_different_users')
             )
           end
         end
 
-        context 'if user_2 has pending trades' do
-          let!(:previous_trade) { TestingFactory[:trade, user_2_id: user_2.id] }
+        context 'if user_1 and user_2 are different users' do
+          context 'if user_1 has pending trades' do
+            let!(:previous_trade) { TestingFactory[:trade, user_1_id: user_1.id] }
 
-          before do
-            expect(Duration).
+            before do
+              expect(Duration).
               to receive(:countdown_string).
-              with(instance_of(Time)) { '04h 19m 51s' }
+              with(instance_of(Time)) { '24h 14m 31s' }
+            end
+
+            it 'returns a failure monad' do
+              expect { subject }.not_to change {
+                trade_repo.trades.count
+              }.from(1)
+              expect(subject).to be_failure
+              expect(subject.failure).to eq(
+                I18n.t('initiate_trade.user_1_in_pending_trade', time: '24h 14m 31s')
+              )
+            end
           end
 
-          it 'returns a failure monad' do
-            expect { subject }.not_to change {
-              trade_repo.trades.count
-            }.from(1)
-            expect(subject).to be_failure
-            expect(subject.failure).to eq(
-              I18n.t('initiate_trade.user_2_in_pending_trade', time: '04h 19m 51s')
-            )
-          end
-        end
+          context 'if user_2 has pending trades' do
+            let!(:previous_trade) { TestingFactory[:trade, user_2_id: user_2.id] }
 
-        context 'if neither user had pending trades' do
-          it 'creates a trade and wraps it in a success monad' do
-            expect { subject }.to change {
-              trade_repo.trades.count
-            }.from(0).to(1)
-            expect(subject).to be_success
-            trade = subject.value!
-            expect(trade.user_1_id).to eq(user_1.id)
-            expect(trade.user_2_id).to eq(user_2.id)
-            expect(trade.created_at).to be_within(5).of(Time.now)
-            expect(trade.updated_at).to be_within(5).of(Time.now)
-            expect(trade.expires_at).to be_within(5).of(Time.now + (5 * 60))
+            before do
+              expect(Duration).
+                to receive(:countdown_string).
+                with(instance_of(Time)) { '04h 19m 51s' }
+            end
+
+            it 'returns a failure monad' do
+              expect { subject }.not_to change {
+                trade_repo.trades.count
+              }.from(1)
+              expect(subject).to be_failure
+              expect(subject.failure).to eq(
+                I18n.t('initiate_trade.user_2_in_pending_trade', time: '04h 19m 51s')
+              )
+            end
+          end
+
+          context 'if neither user had pending trades' do
+            it 'creates a trade and wraps it in a success monad' do
+              expect { subject }.to change {
+                trade_repo.trades.count
+              }.from(0).to(1)
+              expect(subject).to be_success
+              trade = subject.value!
+              expect(trade.user_1_id).to eq(user_1.id)
+              expect(trade.user_2_id).to eq(user_2.id)
+              expect(trade.created_at).to be_within(5).of(Time.now)
+              expect(trade.updated_at).to be_within(5).of(Time.now)
+              expect(trade.expires_at).to be_within(5).of(Time.now + (5 * 60))
+            end
           end
         end
       end
