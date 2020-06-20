@@ -46,3 +46,7 @@ en:
     must_be_different_users: You cannot trade with yourself. Try tagging a different user.
     user_1_in_pending_trade: "You are already in a trade! Either complete that trade or wait %{time} for it to expire."
     user_2_in_pending_trade: "That user is already in a trade! Let them complete that trade or wait %{time} for it to expire."
+  accept_trade:
+    no_such_trade: Could not find a trade to accept! Maybe it has already expired?
+    only_user_2_can_accept: You cannot accept a trade that you initiated! The other person
+    already_accepted: This trade has already been accepted! You can add or remove Pokemon from this trade with `p!trade add [catch number]` and `p!trade remove [catch number]` respectively.
