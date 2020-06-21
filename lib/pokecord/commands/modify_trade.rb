@@ -10,7 +10,7 @@ require_relative '../../repositories/spawned_pokemon_repo'
 
 module Pokecord
   module Commands
-    class AddToTrade
+    class ModifyTrade
       include Dry::Monads[:result]
       include Dry::Monads::Do.for(:call)
 

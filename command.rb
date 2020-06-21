@@ -15,7 +15,7 @@ require_relative './lib/pokecord/commands/name_rival'
 require_relative './lib/pokecord/commands/fight'
 require_relative './lib/pokecord/commands/initiate_trade'
 require_relative './lib/pokecord/commands/accept_trade'
-require_relative './lib/pokecord/commands/add_to_trade'
+require_relative './lib/pokecord/commands/modify_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
 
 require_relative './lib/pokecord/embed_templates'
@@ -235,7 +235,7 @@ bot.command(:trade) do |event, subcommand, arg1|
       if arg1.nil?
         I18n.t('add_to_trade.argument_error')
       else
-        result = Pokecord::Commands::AddToTrade.new(event.user.id.to_s, arg1).call
+        result = Pokecord::Commands::ModifyTrade.new(event.user.id.to_s, arg1).call
         if result.success?
           trade = result.value!
           old_message = event.channel.load_message(trade.message_discord_id)

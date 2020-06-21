@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative '../../../lib/pokecord/commands/add_to_trade'
+require_relative '../../../lib/pokecord/commands/modify_trade'
 
-RSpec.describe Pokecord::Commands::AddToTrade do
+RSpec.describe Pokecord::Commands::ModifyTrade do
   describe '#call' do
     let(:discord_id) { '24680' }
     let(:catch_number) { 999 }
