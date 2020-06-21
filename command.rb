@@ -16,7 +16,7 @@ require_relative './lib/pokecord/commands/fight'
 require_relative './lib/pokecord/commands/initiate_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
 
-EMBED_COLOR = '#34d8eb'
+require_relative './lib/pokecord/embed_templates'
 
 I18n.load_path << Dir[File.expand_path("config/locales") + "/*.yml"]
 I18n.default_locale = :en
@@ -32,7 +32,7 @@ end
 
 bot.command :start do |event|
   event.channel.send_embed do |embed|
-    embed.color = EMBED_COLOR
+    embed.color = Pokecord::EmbedTemplates::EMBED_COLOR
     embed.title = 'Welcome to Pokecord'
     embed.description = <<~DESC
       This is a Discord bot that
@@ -104,7 +104,7 @@ bot.command(:pokemon) do |event, given_page_num|
   pokemons = list_cmd.to_a
   if pokemons.length > 0
     event.channel.send_embed do |embed|
-      embed.color = EMBED_COLOR
+      embed.color = Pokecord::EmbedTemplates::EMBED_COLOR
       embed.title = "Pokemon caught by #{event.user.name}"
       embed.description = pokemons.map do |spawn|
         poke = spawn.pokemon
@@ -144,7 +144,7 @@ bot.command(:info) do |event|
     poke_ideal = poke_spawn.pokemon
     pokedex_display = poke_ideal.pokedex_number.to_s.rjust(3, '0')
     event.channel.send_embed do |embed|
-      embed.color = EMBED_COLOR
+      embed.color = Pokecord::EmbedTemplates::EMBED_COLOR
       embed.title = "#{event.user.name}'s #{poke_spawn.nickname || poke_ideal.name}"
       embed.description = "Level #{poke_spawn.level} #{poke_ideal.name}"
       embed.add_field(name: 'Pokedex No.', value: pokedex_display)
