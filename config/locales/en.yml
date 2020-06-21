@@ -51,3 +51,8 @@ en:
     no_such_trade: Could not find a trade to accept! Maybe it has already expired?
     only_user_2_can_accept: You cannot accept a trade that you initiated! The other person
     already_accepted: This trade has already been accepted! You can add or remove Pokemon from this trade with `p!trade add [catch number]` and `p!trade remove [catch number]` respectively.
+  add_to_trade:
+    no_such_trade: Could not find any trade to add Pokemon to! Maybe it has already expired?
+    no_such_catch_number: "Could not find a Pokemon with catch number %{number}. Use `p!pokemon` to list out all your Pokemon and their catch numbers."
+    cannot_add_after_confirm: You cannot add any Pokemon to this trade after you've confirmed the trade.
+    user_2_needs_to_accept: You cannot add any Pokemon to this trade until the trade has been accepted with `p!accept`.
