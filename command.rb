@@ -249,7 +249,24 @@ bot.command(:trade) do |event, subcommand, arg1|
           result.failure
         end
       end
-    when 'remove' then I18n.t('trade.subcommand_not_implemented')
+    when 'remove'
+      if arg1.nil?
+        I18n.t('remove_from_trade.argument_error')
+      else
+        result = Pokecord::Commands::ModifyTrade.new(event.user.id.to_s, arg1, action: :remove).call
+        if result.success?
+          trade = result.value!
+          old_message = event.channel.load_message(trade.message_discord_id)
+          if old_message.nil?
+            I18n.t('trade.discord_error')
+          else
+            old_message.edit('', Pokecord::EmbedTemplates::Trade.new(trade).to_embed)
+          end
+          nil
+        else
+          result.failure
+        end
+      end
     else
       I18n.t('trade.subcommand_error')
     end
