@@ -40,6 +40,7 @@ en:
       Once the other party accepts using `p!accept`, you can add Pokemon to the trade with `p!trade add [catch number]`
       and remove them with `p!trade remove [catch number]`. Lastly, both parties can confirm the trade with `p!confirm`.
     subcommand_not_implemented: "The %{subcommand} subcommand has not been implemented yet. Check back later for more updates!"
+    how_to_trade_description: You can add and remove Pokemon from this trade with `p!trade add [catch number]` and `p!trade remove [catch number]` repectively. Then both users can use `p!confirm` to submit the trade.
   initiate_trade:
     no_discord_id: No user tag detected. Correct usage of this command is `p!trade with @[user_tag]`.
     no_such_user: Could not find a user with that tag. Maybe they need to `p!start` to begin their Pokemon journey.
