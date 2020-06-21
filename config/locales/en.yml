@@ -59,3 +59,10 @@ en:
     no_such_catch_number: "Could not find a Pokemon with catch number %{number}. Use `p!pokemon` to list out all your Pokemon and their catch numbers."
     cannot_add_after_confirm: You cannot add any Pokemon to this trade after you've confirmed the trade.
     user_2_needs_to_accept: You cannot add any Pokemon to this trade until the trade has been accepted with `p!accept`.
+    spawn_has_already_been_added: This Pokemon has already been added to the trade.
+  remove_from_trade:
+    argument_error: Use a Pokemon's catch number to remove them from this trade. Correct usage of this command is `p!trade remove [catch number]`.
+    no_such_trade: Could not find any trade to remove Pokemon from! Maybe it has already expired?
+    no_such_catch_number: "Could not find a Pokemon with catch number %{number}. Use `p!pokemon` to list out all your Pokemon and their catch numbers."
+    cannot_add_after_confirm: You cannot remove any Pokemon from this trade after you've confirmed the trade.
+    user_2_needs_to_accept: You cannot remove any Pokemon from this trade until the trade has been accepted with `p!accept`.

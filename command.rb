@@ -235,7 +235,7 @@ bot.command(:trade) do |event, subcommand, arg1|
       if arg1.nil?
         I18n.t('add_to_trade.argument_error')
       else
-        result = Pokecord::Commands::ModifyTrade.new(event.user.id.to_s, arg1).call
+        result = Pokecord::Commands::ModifyTrade.new(event.user.id.to_s, arg1, action: :add).call
         if result.success?
           trade = result.value!
           old_message = event.channel.load_message(trade.message_discord_id)
