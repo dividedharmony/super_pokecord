@@ -14,9 +14,12 @@ require_relative './lib/pokecord/commands/nickname'
 require_relative './lib/pokecord/commands/name_rival'
 require_relative './lib/pokecord/commands/fight'
 require_relative './lib/pokecord/commands/initiate_trade'
+require_relative './lib/pokecord/commands/accept_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
 
 require_relative './lib/pokecord/embed_templates'
+
+require_relative './lib/callbacks/update_trade'
 
 I18n.load_path << Dir[File.expand_path("config/locales") + "/*.yml"]
 I18n.default_locale = :en
@@ -231,6 +234,18 @@ bot.command(:trade) do |event, subcommand, arg1|
   end
 end
 
+bot.command(:accept) do |event|
+  result = Pokecord::Commands::AcceptTrade.new(event.user.id.to_s, event.user.name).call
+  if result.success?
+    trade = result.value!
+    embed_message = event.channel.send_embed(Pokecord::EmbedTemplates::Trade.new(trade).to_embed)
+    Callbacks::UpdateTrade.new(trade).call(message_discord_id: embed_message.id)
+    nil # don't send any message after the embed
+  else
+    result.failure
+  end
+end
+
 %w{
   order
   hint
@@ -246,7 +261,6 @@ end
   learn
   replace
   duel
-  accept
   use
   confirm
   balance
