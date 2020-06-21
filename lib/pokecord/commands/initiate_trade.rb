@@ -18,9 +18,10 @@ module Pokecord
 
       EXPIRATION_TIME_DELAY = (5 * 60)
 
-      def initialize(user_1_discord_id, user_2_reference)
+      def initialize(user_1_discord_id, user_2_reference, user_1_name)
         @user_1_discord_id = user_1_discord_id
         @user_2_reference = user_2_reference
+        @user_1_name = user_1_name
         @user_repo = Repositories::PokemonRepo.new(
           Db::Connection.registered_container
         )
@@ -38,6 +39,7 @@ module Pokecord
         trade = trade_repo.create(
           user_1_id: user_1.id,
           user_2_id: user_2.id,
+          user_1_name: user_1_name,
           created_at: Time.now,
           updated_at: Time.now,
           expires_at: (Time.now + EXPIRATION_TIME_DELAY)
@@ -47,7 +49,7 @@ module Pokecord
 
       private
 
-      attr_reader :user_1_discord_id, :user_2_reference, :user_repo, :trade_repo
+      attr_reader :user_1_discord_id, :user_2_reference, :user_1_name, :user_repo, :trade_repo
 
       def get_user_1
         user = user_repo.users.where(discord_id: user_1_discord_id).one

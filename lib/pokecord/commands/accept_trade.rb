@@ -13,8 +13,9 @@ module Pokecord
       include Dry::Monads[:result]
       include Dry::Monads::Do.for(:call)
 
-      def initialize(discord_id)
+      def initialize(discord_id, user_2_name)
         @discord_id = discord_id
+        @user_2_name = user_2_name
         @user_repo = Repositories::PokemonRepo.new(
           Db::Connection.registered_container
         )
@@ -30,14 +31,16 @@ module Pokecord
 
         update_cmd = trade_repo.trades.by_pk(trade.id).command(:update)
         trade = update_cmd.call(
-          user_2_accepted: true
+          user_2_accepted: true,
+          user_2_name: user_2_name,
+          updated_at: Time.now
         )
         Success(trade)
       end
 
       private
 
-      attr_reader :discord_id, :user_repo, :trade_repo
+      attr_reader :discord_id, :user_2_name, :user_repo, :trade_repo
 
       def get_user
         user = user_repo.users.where(discord_id: discord_id).one

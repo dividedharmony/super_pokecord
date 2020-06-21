@@ -217,7 +217,7 @@ bot.command(:trade) do |event, subcommand, arg1|
   else
     case subcommand
     when 'with'
-      result = Pokecord::Command::InitiateTrade.new(event.user.id.to_s, arg1).call
+      result = Pokecord::Command::InitiateTrade.new(event.user.id.to_s, arg1, event.user.name).call
       if result.success?
         "#{arg1}, you have been invited to trade with #{event.user.mention}. You can accept the invitation with `p!accept`."
       else

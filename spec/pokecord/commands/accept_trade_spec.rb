@@ -10,8 +10,9 @@ RSpec.describe Pokecord::Commands::AcceptTrade do
       )
     end
     let(:discord_id) { '123456' }
+    let(:user_2_name) { 'Judge Dread' }
 
-    subject { described_class.new(discord_id).call }
+    subject { described_class.new(discord_id, user_2_name).call }
 
     context 'if no user exists with that discord_id' do
       it 'returns a failure monad' do
@@ -92,7 +93,9 @@ RSpec.describe Pokecord::Commands::AcceptTrade do
               trade_repo.trades.by_pk(trade.id).one.user_2_accepted
             }.from(false).to(true)
             expect(subject).to be_success
-            expect(subject.value!.id).to eq(trade.id)
+            returned_trade = subject.value!
+            expect(returned_trade.id).to eq(trade.id)
+            expect(returned_trade.user_2_name).to eq('Judge Dread')
           end
         end
       end

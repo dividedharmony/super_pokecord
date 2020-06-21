@@ -6,7 +6,8 @@ RSpec.describe Pokecord::Commands::InitiateTrade do
   describe '#call' do
     let(:user_1_discord_id) { '12345' }
     let(:user_2_reference) { '<!@9876alex>' }
-    let(:initiate_trade) { described_class.new(user_1_discord_id, user_2_reference) }
+    let(:user_1_name) { 'Sam Johnson' }
+    let(:initiate_trade) { described_class.new(user_1_discord_id, user_2_reference, user_1_name) }
     let(:trade_repo) do
       Repositories::TradeRepo.new(
         Db::Connection.registered_container
@@ -121,6 +122,7 @@ RSpec.describe Pokecord::Commands::InitiateTrade do
               trade = subject.value!
               expect(trade.user_1_id).to eq(user_1.id)
               expect(trade.user_2_id).to eq(user_2.id)
+              expect(trade.user_1_name).to eq('Sam Johnson')
               expect(trade.created_at).to be_within(5).of(Time.now)
               expect(trade.updated_at).to be_within(5).of(Time.now)
               expect(trade.expires_at).to be_within(5).of(Time.now + (5 * 60))
