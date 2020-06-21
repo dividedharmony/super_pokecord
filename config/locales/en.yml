@@ -41,7 +41,9 @@ en:
       and remove them with `p!trade remove [catch number]`. Lastly, both parties can confirm the trade with `p!confirm`.
     subcommand_not_implemented: "The %{subcommand} subcommand has not been implemented yet. Check back later for more updates!"
     how_to_trade_description: You can add and remove Pokemon from this trade with `p!trade add [catch number]` and `p!trade remove [catch number]` repectively. Then both users can use `p!confirm` to submit the trade.
+    discord_error: Unfortunately, there has been an error with Discord. Please wait and try again later.
   initiate_trade:
+    argument_error: Tag a user to initiate a trade! Correct usage of this command is `p!trade with @[user_tag]`.
     no_discord_id: No user tag detected. Correct usage of this command is `p!trade with @[user_tag]`.
     no_such_user: Could not find a user with that tag. Maybe they need to `p!start` to begin their Pokemon journey.
     must_be_different_users: You cannot trade with yourself. Try tagging a different user.
@@ -52,6 +54,7 @@ en:
     only_user_2_can_accept: You cannot accept a trade that you initiated! The other person
     already_accepted: This trade has already been accepted! You can add or remove Pokemon from this trade with `p!trade add [catch number]` and `p!trade remove [catch number]` respectively.
   add_to_trade:
+    argument_error: Use a Pokemon's catch number to add them to this trade. Correct usage of this command is `p!trade add [catch number]`.
     no_such_trade: Could not find any trade to add Pokemon to! Maybe it has already expired?
     no_such_catch_number: "Could not find a Pokemon with catch number %{number}. Use `p!pokemon` to list out all your Pokemon and their catch numbers."
     cannot_add_after_confirm: You cannot add any Pokemon to this trade after you've confirmed the trade.

@@ -15,6 +15,7 @@ require_relative './lib/pokecord/commands/name_rival'
 require_relative './lib/pokecord/commands/fight'
 require_relative './lib/pokecord/commands/initiate_trade'
 require_relative './lib/pokecord/commands/accept_trade'
+require_relative './lib/pokecord/commands/add_to_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
 
 require_relative './lib/pokecord/embed_templates'
@@ -220,13 +221,34 @@ bot.command(:trade) do |event, subcommand, arg1|
   else
     case subcommand
     when 'with'
-      result = Pokecord::Command::InitiateTrade.new(event.user.id.to_s, arg1, event.user.name).call
-      if result.success?
-        "#{arg1}, you have been invited to trade with #{event.user.mention}. You can accept the invitation with `p!accept`."
+      if arg1.nil?
+        I18n.t('initiate_trade.argument_error')
       else
-        result.failure
+        result = Pokecord::Command::InitiateTrade.new(event.user.id.to_s, arg1, event.user.name).call
+        if result.success?
+          "#{arg1}, you have been invited to trade with #{event.user.mention}. You can accept the invitation with `p!accept`."
+        else
+          result.failure
+        end
       end
-    when 'add' then I18n.t('trade.subcommand_not_implemented')
+    when 'add'
+      if arg1.nil?
+        I18n.t('add_to_trade.argument_error')
+      else
+        result = Pokecord::Commands::AddToTrade.new(event.user.id.to_s, arg1).call
+        if result.success?
+          trade = result.value!
+          old_message = event.channel.load_message(trade.message_discord_id)
+          if old_message.nil?
+            I18n.t('trade.discord_error')
+          else
+            old_message.edit('', Pokecord::EmbedTemplates::Trade.new(trade).to_embed)
+          end
+          nil
+        else
+          result.failure
+        end
+      end
     when 'remove' then I18n.t('trade.subcommand_not_implemented')
     else
       I18n.t('trade.subcommand_error')
