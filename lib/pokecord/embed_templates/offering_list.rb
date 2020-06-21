@@ -29,7 +29,7 @@ module Pokecord
 
       def list_array
         spawns.map do |spawn|
-          "Level #{spawn.level} #{spawn.pokemon.name}"
+          "Level #{spawn.level} #{spawn.pokemon.name} (Catch number: #{spawn.catch_number})"
         end
       end
     end
