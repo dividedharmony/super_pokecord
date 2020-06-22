@@ -10,6 +10,8 @@ require_relative '../../repositories/trade_repo'
 module Pokecord
   module Commands
     class AcceptTrade
+      EXPIRATION_TIME_INCREASE = (5 * 60)
+
       include Dry::Monads[:result]
       include Dry::Monads::Do.for(:call)
 
@@ -33,7 +35,8 @@ module Pokecord
         trade = update_cmd.call(
           user_2_accepted: true,
           user_2_name: user_2_name,
-          updated_at: Time.now
+          updated_at: Time.now,
+          expires_at: (Time.now + EXPIRATION_TIME_INCREASE)
         )
         Success(trade)
       end

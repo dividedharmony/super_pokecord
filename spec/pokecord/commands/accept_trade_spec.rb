@@ -96,6 +96,7 @@ RSpec.describe Pokecord::Commands::AcceptTrade do
             returned_trade = subject.value!
             expect(returned_trade.id).to eq(trade.id)
             expect(returned_trade.user_2_name).to eq('Judge Dread')
+            expect(returned_trade.expires_at).to be_within(5).of(Time.now + (5 * 60))
           end
         end
       end

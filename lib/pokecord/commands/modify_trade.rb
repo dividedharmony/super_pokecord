@@ -11,6 +11,8 @@ require_relative '../../repositories/spawned_pokemon_repo'
 module Pokecord
   module Commands
     class ModifyTrade
+      EXPIRATION_TIME_INCREASE = (5 * 60)
+
       include Dry::Monads[:result]
       include Dry::Monads::Do.for(:call)
 
@@ -37,14 +39,19 @@ module Pokecord
         spawn = yield get_spawn(user)
         yield validate_spawn(spawn, trade)
 
-        update_cmd = spawn_repo.spawned_pokemons.by_pk(spawn.id).command(:update)
+        update_spawn_cmd = spawn_repo.spawned_pokemons.by_pk(spawn.id).command(:update)
         if action == :add
-          update_cmd.call(trade_id: trade.id)
+          update_spawn_cmd.call(trade_id: trade.id)
         elsif action == :remove
-          update_cmd.call(trade_id: nil)
+          update_spawn_cmd.call(trade_id: nil)
         else
           raise ArgumentError, 'Only :add and :remove are acceptable actions for this class'
         end
+        update_trade_cmd = trade_repo.trades.by_pk(trade.id).command(:update)
+        trade = update_trade_cmd.call(
+          updated_at: Time.now,
+          expires_at: (Time.now + EXPIRATION_TIME_INCREASE)
+        )
         Success(trade)
       end
 

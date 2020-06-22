@@ -131,7 +131,9 @@ RSpec.describe Pokecord::Commands::ModifyTrade do
                     spawn_repo.spawned_pokemons.by_pk(spawn.id).one.trade_id
                   }.from(nil).to(trade.id)
                   expect(subject).to be_success
-                  expect(subject.value!.id).to eq(trade.id)
+                  returned_trade = subject.value!
+                  expect(returned_trade.id).to eq(trade.id)
+                  expect(returned_trade.expires_at).to be_within(5).of(Time.now + (5 * 60))
                 end
               end
             end
@@ -267,7 +269,9 @@ RSpec.describe Pokecord::Commands::ModifyTrade do
                     spawn_repo.spawned_pokemons.by_pk(spawn.id).one.trade_id
                   }.from(trade.id).to(nil)
                   expect(subject).to be_success
-                  expect(subject.value!.id).to eq(trade.id)
+                  returned_trade = subject.value!
+                  expect(returned_trade.id).to eq(trade.id)
+                  expect(returned_trade.expires_at).to be_within(5).of(Time.now + (5 * 60))
                 end
               end
             end
