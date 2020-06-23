@@ -66,3 +66,7 @@ en:
     no_such_catch_number: "Could not find a Pokemon with catch number %{number}. Use `p!pokemon` to list out all your Pokemon and their catch numbers."
     cannot_add_after_confirm: You cannot remove any Pokemon from this trade after you've confirmed the trade.
     user_2_needs_to_accept: You cannot remove any Pokemon from this trade until the trade has been accepted with `p!accept`.
+  confirm_trade:
+    no_such_trade: Could not find any trade to confirm. Maybe it has already expired?
+    user_2_needs_to_accept: You cannot confirm a trade until the trade has been accepted with `p!accept`.
+    already_confirmed: You have already confirmed this trade!
