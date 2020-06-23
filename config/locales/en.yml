@@ -70,3 +70,5 @@ en:
     no_such_trade: Could not find any trade to confirm. Maybe it has already expired?
     user_2_needs_to_accept: You cannot confirm a trade until the trade has been accepted with `p!accept`.
     already_confirmed: You have already confirmed this trade!
+  execute_trade:
+    no_spawns_to_trade: Neither user obtained any Pokmeon as a result of this trade.
