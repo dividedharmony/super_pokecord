@@ -3,7 +3,7 @@
 require_relative '../../lib/repositories/evolution_repo'
 
 RSpec.describe Repositories::EvolutionRepo do
-  describe '#level_up_evolutions' do
+  describe '#evolutions_by_trigger' do
     let(:evolution_repo) do
       described_class.new(
         Db::Connection.registered_container
@@ -18,7 +18,7 @@ RSpec.describe Repositories::EvolutionRepo do
       ]
     end
 
-    subject { evolution_repo.level_up_evolutions(spawned_pokemon).to_a }
+    subject { evolution_repo.evolutions_by_trigger(spawned_pokemon, :level_up).to_a }
 
     context 'if evolution does not evolve from spawned_pokemon' do
       let(:other_pokemon) { TestingFactory[:pokemon] }
@@ -38,14 +38,14 @@ RSpec.describe Repositories::EvolutionRepo do
         ]
       end
 
-      context 'if evolution is not triggered by leveling up' do
+      context 'if evolution is not triggered by the given trigger' do
         # 2 = trade trigger
         let(:trigger_enum) { 2 }
 
         it { is_expected.to be_empty }
       end
 
-      context 'if evolution is triggered by leveling up' do
+      context 'if evolution is triggered by the given trigger' do
         # 0 = level_up trigger
         let(:trigger_enum) { 0 }
 
