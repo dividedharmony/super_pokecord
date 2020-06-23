@@ -48,7 +48,7 @@ RSpec.describe Pokecord::ExpApplier do
         before do
           expect(Pokecord::Evolve).
             to receive(:new).
-            with(having_attributes(id: spawned_pokemon.id)) { mock_evolve }
+            with(having_attributes(id: spawned_pokemon.id), :level_up) { mock_evolve }
         end
 
         context 'if leveling up causes pokemon to evolve' do

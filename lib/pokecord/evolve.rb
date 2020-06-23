@@ -15,8 +15,9 @@ module Pokecord
     include Dry::Monads[:result]
     include Dry::Monads::Do.for(:call)
 
-    def initialize(spawned_pokemon)
+    def initialize(spawned_pokemon, trigger_name)
       @spawned_pokemon = spawned_pokemon
+      @trigger_name = trigger_name
       @spawn_repo = Repositories::SpawnedPokemonRepo.new(
         Db::Connection.registered_container
       )
@@ -39,7 +40,11 @@ module Pokecord
 
     private
 
-    attr_reader :spawned_pokemon, :spawn_repo, :pokemon_repo, :evolution_repo
+    attr_reader :spawned_pokemon,
+                :trigger_name,
+                :spawn_repo,
+                :pokemon_repo,
+                :evolution_repo
 
     def pokemon
       @_pokemon ||= pokemon_repo.
@@ -50,7 +55,7 @@ module Pokecord
 
     def fulfilled_evolutions
       fulfilled_evos = evolution_repo.
-        level_up_evolutions(spawned_pokemon).
+        evolutions_by_trigger(spawned_pokemon, trigger_name).
         combine(:evolves_into).
         to_a.
         select { |evo| evo.prereq_fulfilled?(spawned_pokemon) }

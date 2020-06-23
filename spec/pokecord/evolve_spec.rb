@@ -22,15 +22,15 @@ RSpec.describe Pokecord::Evolve do
       ]
     end
 
-    subject { described_class.new(spawned_pokemon).call }
+    subject { described_class.new(spawned_pokemon, :level_up).call }
 
     before do
       expect_any_instance_of(Repositories::EvolutionRepo).
-        to receive(:level_up_evolutions).
-        with(spawned_pokemon) { evo_repo.evolutions }
+        to receive(:evolutions_by_trigger).
+        with(spawned_pokemon, :level_up) { evo_repo.evolutions }
     end
 
-    context 'if there are no level_up_evolutions for spawned_pokemon' do
+    context 'if there are no level_up evolutions for spawned_pokemon' do
       it 'returns a failure monad' do
         expect { subject }.not_to change {
           spawn_repo.spawned_pokemons.by_pk(spawned_pokemon.id).one.pokemon_id
@@ -39,7 +39,7 @@ RSpec.describe Pokecord::Evolve do
       end
     end
 
-    context 'if there are level_up_evolutions for spawned_pokemon' do
+    context 'if there are level_up evolutions for spawned_pokemon' do
       let(:new_pokemon) { TestingFactory[:pokemon] }
       let!(:evolution) do
         TestingFactory[

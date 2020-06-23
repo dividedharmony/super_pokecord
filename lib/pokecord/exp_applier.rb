@@ -35,7 +35,7 @@ module Pokecord
           current_exp: new_total_exp,
           required_exp: new_required_exp
         )
-        evolve_result = Pokecord::Evolve.new(spawned_pokemon).call
+        evolve_result = Pokecord::Evolve.new(spawned_pokemon, :level_up).call
         evolve_result.fmap do |resulting_pokemon|
           @evolved_into = resulting_pokemon
         end
