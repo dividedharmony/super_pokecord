@@ -7,10 +7,13 @@ require_relative '../../../db/connection'
 require_relative '../../repositories/user_repo'
 require_relative '../../repositories/trade_repo'
 require_relative '../../repositories/spawned_pokemon_repo'
+require_relative '../evolve'
 
 module Pokecord
   module Commands
     class ExecuteTrade
+      TradePayload = Struct.new(:trade, :evolved_spawns_with_pokemon)
+
       include Dry::Monads[:result]
       include Dry::Monads::Do.for(:call)
 
@@ -25,6 +28,7 @@ module Pokecord
         @spawn_repo = Repositories::SpawnedPokemonRepo.new(
           Db::Connection.registered_container
         )
+        @evolved_spawns_with_pokemon = {}
       end
 
       def call
@@ -42,12 +46,12 @@ module Pokecord
           handle_evolution(spawn)
         end
 
-        Success(spawns)
+        Success(TradePayload.new(trade, evolved_spawns_with_pokemon))
       end
 
       private
 
-      attr_reader :trade_id, :user_repo, :trade_repo, :spawn_repo
+      attr_reader :trade_id, :user_repo, :trade_repo, :spawn_repo, :evolved_spawns_with_pokemon
 
       def trade
         @_trade ||= trade_repo.
@@ -73,8 +77,11 @@ module Pokecord
         end
       end
 
-      def handle_evolution(_spawn)
-        # TODO evolve pokemon that evolve from trading
+      def handle_evolution(spawn)
+        evolve_result = Pokecord::Evolve.new(spawn, :trade).call
+        evolve_result.fmap do |resulting_pokemon|
+          @evolved_spawns_with_pokemon[spawn] = resulting_pokemon
+        end
       end
 
       def clear_current_pokemon(user)
