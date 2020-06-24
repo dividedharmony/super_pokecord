@@ -294,8 +294,8 @@ bot.command(:confirm) do |event|
     trade = confirm_result.value!
     if trade.user_1_confirm && trade.user_2_confirm
       execute_result = Pokecord::Commands::ExecuteTrade.new(trade.id).call
-      if excute_result.success?
-        trade_payload = excute_result.value!
+      if execute_result.success?
+        trade_payload = execute_result.value!
         messages = []
         messages << "#{trade.user_1_name} and #{trade.user_2_name} have successfully exchanged Pokemon!"
         trade_payload.evolution_payloads.each do |evo_payload|
@@ -304,7 +304,7 @@ bot.command(:confirm) do |event|
         end
         messages.join("\n")
       else
-        excute_result.failure
+        execute_result.failure
       end
     end
   else
