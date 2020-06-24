@@ -19,6 +19,7 @@ require_relative './lib/pokecord/commands/modify_trade'
 require_relative './lib/pokecord/commands/confirm_trade'
 require_relative './lib/pokecord/commands/execute_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
+require_relative './lib/pokecord/commands/balance'
 
 require_relative './lib/pokecord/embed_templates'
 
@@ -311,6 +312,11 @@ bot.command(:confirm) do |event|
   end
 end
 
+bot.command(:balance) do |event|
+  bal_result = Pokecord::Commands::Balance.new(event.user.id.to_s).call
+  bal_result.success? ? bal_result.value! : bal_result.failure
+end
+
 %w{
   order
   hint
@@ -327,7 +333,6 @@ end
   replace
   duel
   use
-  balance
   bal
   market
   p
