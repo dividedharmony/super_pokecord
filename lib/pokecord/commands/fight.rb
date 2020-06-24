@@ -9,6 +9,7 @@ require_relative '../../repositories/fight_event_repo'
 require_relative '../../repositories/user_repo'
 
 require_relative '../../duration'
+require_relative '../../readable_number'
 require_relative '../fight_conditions'
 require_relative '../npc_name'
 
@@ -44,7 +45,7 @@ module Pokecord
         update_event_cmd = fight_event_repo.fight_events.by_pk(fight_event.id).command(:update)
         update_event_cmd.call(last_fought_at: Time.now, available_at: next_available_at)
         name = Pokecord::NpcName.new(fight_type.code, user).to_s
-        Success(I18n.t('fight.success', name: name, currency: currency_award))
+        Success(I18n.t('fight.success', name: name, currency: ReadableNumber.stringify(currency_award)))
       end
 
       private

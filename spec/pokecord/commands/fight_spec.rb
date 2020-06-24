@@ -161,7 +161,7 @@ RSpec.describe Pokecord::Commands::Fight do
           user_reload = user_repo.users.by_pk(user.id).one!
           expect(user_reload.current_balance).to eq(11_020)
           expect(subject.value!).to eq(
-            I18n.t('fight.success', name: 'Lady Amanda', currency: 11_000)
+            I18n.t('fight.success', name: 'Lady Amanda', currency: '11,000')
           )
         end
       end
@@ -187,7 +187,7 @@ RSpec.describe Pokecord::Commands::Fight do
           user_reload = user_repo.users.by_pk(user.id).one!
           expect(user_reload.current_balance).to eq(11_020)
           expect(subject.value!).to eq(
-            I18n.t('fight.success', name: 'Lady Amanda', currency: 11_000)
+            I18n.t('fight.success', name: 'Lady Amanda', currency: '11,000')
           )
         end
       end
