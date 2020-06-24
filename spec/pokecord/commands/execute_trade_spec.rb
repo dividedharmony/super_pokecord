@@ -64,7 +64,7 @@ RSpec.describe Pokecord::Commands::ExecuteTrade do
         expect(subject).to be_success
         trade_payload = subject.value!
         expect(trade_payload.trade.id).to eq(trade.id)
-        expect(trade_payload.evolved_spawns_with_pokemon).to be_empty
+        expect(trade_payload.evolution_payloads).to be_empty
 
         reloaded_spawn_1 = spawn_repo.spawned_pokemons.by_pk(spawn_owned_by_1.id).one!
         expect(reloaded_spawn_1.user_id).to eq(user_2.id)
@@ -106,7 +106,17 @@ RSpec.describe Pokecord::Commands::ExecuteTrade do
       end
 
       context 'if a pokemon has an evolution triggered by trading' do
-        let!(:pokemon) { TestingFactory[:pokemon] }
+        let!(:evolved_from) { TestingFactory[:pokemon] }
+        let!(:evolved_into) { TestingFactory[:pokemon] }
+        let!(:spawn_owned_by_2) do
+          TestingFactory[
+            :spawned_pokemon,
+            pokemon_id: evolved_from.id,
+            trade_id: trade.id,
+            user_id: user_2.id,
+            catch_number: 22
+          ]
+        end
 
         before do
           mock_evolve1 = instance_double(Pokecord::Evolve)
@@ -120,17 +130,18 @@ RSpec.describe Pokecord::Commands::ExecuteTrade do
           expect(mock_evolve1).
             to receive(:call) { Dry::Monads::Result::Failure.new(nil) }
           expect(mock_evolve2).
-            to receive(:call) { Dry::Monads::Result::Success.new(pokemon) }
+            to receive(:call) { Dry::Monads::Result::Success.new(evolved_into) }
         end
 
         it 'evolves that pokemon' do
           expect(subject).to be_success
           trade_payload = subject.value!
           expect(trade_payload.trade.id).to eq(trade.id)
-          evolved_spawns = trade_payload.evolved_spawns_with_pokemon
-          expect(evolved_spawns.length).to eq(1)
-          expect(evolved_spawns.first[0]).to have_attributes(id: spawn_owned_by_2.id)
-          expect(evolved_spawns.first[1]).to eq(pokemon)
+          expect(trade_payload.evolution_payloads.length).to eq(1)
+          evo_payload = trade_payload.evolution_payloads.first
+          expect(evo_payload.spawned_pokemon).to have_attributes(id: spawn_owned_by_2.id)
+          expect(evo_payload.evolved_from.id).to eq(evolved_from.id)
+          expect(evo_payload.evolved_into.id).to eq(evolved_into.id)
         end
       end
     end
