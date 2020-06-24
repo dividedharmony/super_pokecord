@@ -293,7 +293,7 @@ bot.command(:confirm) do |event|
   if confirm_result.success?
     trade = confirm_result.value!
     if trade.user_1_confirm && trade.user_2_confirm
-      execute_result = Pokecord::Commands::ExcuteTrade.new(trade.id).call
+      execute_result = Pokecord::Commands::ExecuteTrade.new(trade.id).call
       if excute_result.success?
         trade_payload = excute_result.value!
         messages = []
