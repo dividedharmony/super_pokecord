@@ -314,7 +314,11 @@ end
 
 bot.command(:balance) do |event|
   bal_result = Pokecord::Commands::Balance.new(event.user.id.to_s).call
-  bal_result.success? ? bal_result.value! : bal_result.failure
+  if bal_result.success?
+    "You have **#{bal_result.value!}** credits."
+  else
+    bal_result.failure
+  end
 end
 
 %w{
