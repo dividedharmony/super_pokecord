@@ -280,7 +280,7 @@ bot.command(:accept) do |event|
   result = Pokecord::Commands::AcceptTrade.new(event.user.id.to_s, event.user.name).call
   if result.success?
     trade = result.value!
-    embed_message = event.channel.send_embed(Pokecord::EmbedTemplates::Trade.new(trade).to_embed)
+    embed_message = event.channel.send_embed('', Pokecord::EmbedTemplates::Trade.new(trade).to_embed)
     Callbacks::UpdateTrade.new(trade).call(message_discord_id: embed_message.id)
     nil # don't send any message after the embed
   else
