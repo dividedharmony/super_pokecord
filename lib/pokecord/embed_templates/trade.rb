@@ -6,6 +6,7 @@ require_relative '../../../db/connection'
 require_relative '../../repositories/spawned_pokemon_repo'
 require_relative '../../repositories/trade_repo'
 
+require_relative '../embed_templates'
 require_relative '../embed_templates/offering_list'
 
 module Pokecord
