@@ -300,7 +300,7 @@ bot.command(:confirm) do |event|
         messages << "#{trade.user_1_name} and #{trade.user_2_name} have successfully exchanged Pokemon!"
         trade_payload.evolution_payloads.each do |evo_payload|
           familiar_name = evo_payload.spawned_pokemon.nickname || evo_payload.evolved_from.name
-          messages << "What!? #{evo_payload.evolved_from.name} is evolving! Your #{familiar_name} has evolved into #{evo_payload.evolved_into.name}"
+          messages << "What!? #{evo_payload.evolved_from.name} is evolving! Your #{familiar_name} has evolved into **#{evo_payload.evolved_into.name}**!!"
         end
         messages.join("\n")
       else
