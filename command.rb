@@ -21,7 +21,7 @@ require_relative './lib/pokecord/commands/execute_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
 require_relative './lib/pokecord/commands/balance'
 
-require_relative './lib/pokecord/embed_templates'
+require_relative './lib/pokecord/embed_templates/trade'
 
 require_relative './lib/callbacks/update_trade'
 
