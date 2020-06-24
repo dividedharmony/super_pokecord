@@ -16,6 +16,8 @@ require_relative './lib/pokecord/commands/fight'
 require_relative './lib/pokecord/commands/initiate_trade'
 require_relative './lib/pokecord/commands/accept_trade'
 require_relative './lib/pokecord/commands/modify_trade'
+require_relative './lib/pokecord/commands/confirm_trade'
+require_relative './lib/pokecord/commands/execute_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
 
 require_relative './lib/pokecord/embed_templates'
@@ -285,6 +287,30 @@ bot.command(:accept) do |event|
   end
 end
 
+bot.command(:confirm) do |event|
+  confirm_result = Pokecord::Commands::ConfirmTrade.new(event.user.id.to_s).call
+  if confirm_result.success?
+    trade = confirm_result.value!
+    if trade.user_1_confirm && trade.user_2_confirm
+      execute_result = Pokecord::Commands::ExcuteTrade.new(trade.id).call
+      if excute_result.success?
+        trade_payload = excute_result.value!
+        messages = []
+        messages << "#{trade.user_1_name} and #{trade.user_2_name} have successfully exchanged Pokemon!"
+        trade_payload.evolution_payloads.each do |evo_payload|
+          familiar_name = evo_payload.spawned_pokemon.nickname || evo_payload.evolved_from.name
+          messages << "What!? #{evo_payload.evolved_from.name} is evolving! Your #{familiar_name} has evolved into #{evo_payload.evolved_into.name}"
+        end
+        messages.join("\n")
+      else
+        excute_result.failure
+      end
+    end
+  else
+    confirm_result.failure
+  end
+end
+
 %w{
   order
   hint
@@ -301,7 +327,6 @@ end
   replace
   duel
   use
-  confirm
   balance
   bal
   market
