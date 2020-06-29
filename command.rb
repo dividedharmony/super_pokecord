@@ -20,6 +20,8 @@ require_relative './lib/pokecord/commands/confirm_trade'
 require_relative './lib/pokecord/commands/execute_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
 require_relative './lib/pokecord/commands/balance'
+# dnd commands
+require_relative './lib/dnd/commands/assign_party_role'
 
 require_relative './lib/pokecord/embed_templates/trade'
 
@@ -351,6 +353,19 @@ end
 }.each do |cmd|
   bot.command cmd.to_sym do |event|
     "The #{cmd} command has not been implemented yet. Check back soon for new features and updates!"
+  end
+end
+
+# D&D commands
+
+bot.command :role do |event|
+  role_result = Dnd::Commands::AssignPartyRole.new(event.user.id.to_s).call
+  if role_result.success?
+    payload = role_result.value!
+    event.user.pm(I18n.t('dnd.assign_party_role', primary: payload.primary.name, secondary: payload.secondary.name))
+    "#{event.user.mention}, you have been sent a direct message with your randomized party role!"
+  else
+    role_result.failure
   end
 end
 
