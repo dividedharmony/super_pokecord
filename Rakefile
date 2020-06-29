@@ -38,6 +38,13 @@ namespace :db do
   end
 end
 
+namespace :dnd do
+  task :populate_party_roles do
+    require_relative './lib/taskers/dnd/populate_party_roles'
+    Taskers::Dnd::PopulatePartyRoles.new.call
+  end
+end
+
 namespace :pokecord do
   task :populate_pokemon do
     require_relative './lib/taskers/populate_pokemons'
