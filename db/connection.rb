@@ -13,6 +13,9 @@ require_relative '../lib/persistence/relations/fight_events'
 require_relative '../lib/persistence/relations/products'
 require_relative '../lib/persistence/relations/trades'
 
+# D&D relations
+require_relative '../lib/persistence/relations/party_roles'
+
 module Db
   class Connection
     class UnknownEnvironmentError < StandardError; end
@@ -33,7 +36,8 @@ module Db
             Persistence::Relations::FightTypes,
             Persistence::Relations::FightEvents,
             Persistence::Relations::Products,
-            Persistence::Relations::Trades
+            Persistence::Relations::Trades,
+            Persistence::Relations::PartyRoles
           )
           ROM.container(configuration)
         end
