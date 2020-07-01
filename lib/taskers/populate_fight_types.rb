@@ -19,12 +19,24 @@ module Taskers
       output.puts "Beginning to populate fight types..."
       fight_type_attributes.each do |attributes|
         output.puts "Creating #{attributes[:code]} fight type"
-        fight_type_repo.create(attributes)
+        upsert_fight_type(attributes)
       end
       output.puts "Finished populating fight types!"
     end
 
     private
+
+    def upsert_fight_type(attributes)
+      fight_type = fight_type_repo.fight_types.where(code: attributes[:code]).one
+      if fight_type.nil?
+        fight_type_repo.create(attributes)
+      else
+        attributes.delete(:code)
+        attributes.delete(:created_at)
+        update_cmd = fight_type_repo.fight_types.by_pk(fight_type.id).command(:update)
+        update_cmd.call(attributes)
+      end
+    end
 
     attr_reader :output, :fight_type_repo, :time_of_creation
 
