@@ -62,14 +62,28 @@ RSpec.describe Pokecord::FightConditions do
       let(:fight_type) { TestingFactory[:fight_type, :elite_four] }
 
       context "if user's gym_badges divided by 8 are less than or equal to the user's elite_four divided by 4" do
-        let(:gym_badges) { 7 }
         let(:elite_four_wins) { 0 }
 
-        it 'indicates conditions are not met' do
-          is_expected.to be false
-          expect(fight_conditions.error_message).to eq(
-            "You must collect 8 badges before you can challenge the Elite Four."
-          )
+        context 'if badges needed are equal to one' do
+          let(:gym_badges) { 7 }
+
+          it 'indicates conditions are not met' do
+            is_expected.to be false
+            expect(fight_conditions.error_message).to eq(
+              "You must collect 8 badges before you can challenge the Elite Four. You have **1** badge left."
+            )
+          end
+        end
+
+        context 'if badges needed are greater than one' do
+          let(:gym_badges) { 2 }
+
+          it 'indicates conditions are not met' do
+            is_expected.to be false
+            expect(fight_conditions.error_message).to eq(
+              "You must collect 8 badges before you can challenge the Elite Four. You have **6** badges left."
+            )
+          end
         end
       end
 

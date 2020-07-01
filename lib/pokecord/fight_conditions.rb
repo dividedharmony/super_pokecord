@@ -44,7 +44,9 @@ module Pokecord
 
     def elite_four_condition_met?
       if gym_cycles <= elite_four_cycles
-        @error_message = "You must collect #{BADGES_PER_GYM_CYCLE} badges before you can challenge the Elite Four."
+        badges_needed = BADGES_PER_GYM_CYCLE - (user.gym_badges % BADGES_PER_GYM_CYCLE)
+        badge_noun = badges_needed == 1 ? 'badge' : 'badges'
+        @error_message = "You must collect #{BADGES_PER_GYM_CYCLE} badges before you can challenge the Elite Four. You have **#{badges_needed}** #{badge_noun} left."
         false
       elsif elite_four_cycles > user.champion_wins
         @error_message = "You have already beaten the Elite Four! Challenge the Pokemon Champion next!"
