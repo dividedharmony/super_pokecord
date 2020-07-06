@@ -41,6 +41,9 @@ en:
   name_rival:
     argument_error: Correct usage of this command is `p!namerival [name of rival]`.
     success: "That's right! Your best friend and greatest rival is named **%{name}**! How could I, their grandfather and legal guardian, forget?"
+  shop:
+    landing_page:
+      description: See a specific page of the shop with the `p!shop [page_number]` command.
   trade:
     subcommand_error: Correct usage of this command is `p!trade with @[user_tag]` to begin a trade.
       Once the other party accepts using `p!accept`, you can add Pokemon to the trade with `p!trade add [catch number]`
