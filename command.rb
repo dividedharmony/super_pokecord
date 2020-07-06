@@ -22,6 +22,8 @@ require_relative './lib/pokecord/commands/list_pokemons'
 require_relative './lib/pokecord/commands/balance'
 # dnd commands
 require_relative './lib/dnd/commands/assign_party_role'
+# admin commands
+require_relative './lib/pokecord/commands/admin/reset_balances'
 
 require_relative './lib/pokecord/embed_templates/trade'
 
@@ -78,12 +80,6 @@ bot.command(:pick) do |event, *args|
       "Congratulations, #{event.user.mention}! You have successfully picked a #{picked_pokemon.name} as your starting Pokemon!"
     end
   end
-end
-
-bot.command(:wild, permission_level: 2) do |event|
-  wild_pokemon = Pokecord::WildPokemon.new
-  wild_pokemon.spawn!
-  event.send_file(File.open(wild_pokemon.pic_file, 'r'), caption: "A wild Pokemon appeared! You can try to catch it with `p!catch` (not implemented)")
 end
 
 bot.command(:catch) do |event, *args|
@@ -366,6 +362,28 @@ bot.command :role do |event|
     "#{event.user.mention}, you have been sent a direct message with your randomized party role!"
   else
     role_result.failure
+  end
+end
+
+#########################
+#
+### Admin commands
+#
+#########################
+
+bot.command(:wild, permission_level: 2) do |event|
+  wild_pokemon = Pokecord::WildPokemon.new
+  wild_pokemon.spawn!
+  event.send_file(File.open(wild_pokemon.pic_file, 'r'), caption: "A wild Pokemon appeared! You can try to catch it with `p!catch` (not implemented)")
+end
+
+bot.command(:admin, permission_level: 2) do |event, subcommand|
+  case subcommand
+  when 'reset_balances'
+    result = Pokecord::Commands::Admin::ResetBalances.new.call
+    result.success? ? result.value! : result.failure
+  else
+    I18n.t('admin.argument_error')
   end
 end
 
