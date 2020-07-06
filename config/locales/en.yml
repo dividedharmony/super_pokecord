@@ -26,6 +26,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  admin:
+    argument_error: Correct usage of this command is `p!admin [reset_balances]`.
+    reset_balances:
+      success: All users' current balances have been reset to 0 credits.
   user_needs_to_start: It looks like you haven't started your Pokemon journey yet! Use `p!start` to pick your starting Pokemon!
   needs_a_current_pokemon: It looks like you don't have Pokemon selected. Use `p!pokemon` to view all your Pokemon and `p!select` to choose which one you want.
   dnd:
