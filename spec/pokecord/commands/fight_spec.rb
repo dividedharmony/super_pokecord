@@ -110,24 +110,17 @@ RSpec.describe Pokecord::Commands::Fight do
       end
     end
 
-    context 'if command is completely valid' do
+    context 'if command is otherwise valid' do
       let(:fight_event_repo) do
         Repositories::FightEventRepo.new(
           Db::Connection.registered_container
         )
       end
-      let(:user_repo) do
-        Repositories::UserRepo.new(
-          Db::Connection.registered_container
-        )
-      end
-      let!(:spawn) { TestingFactory[:spawned_pokemon, level: 1] }
       let!(:user) do
         TestingFactory[
           :user,
           :with_current_pokemon,
           discord_id: '12345',
-          current_pokemon_id: spawn.id,
           current_balance: 20
         ]
       end
@@ -151,43 +144,50 @@ RSpec.describe Pokecord::Commands::Fight do
       end
 
       context 'if user has never participated in this fight type before' do
-        it 'creates a fight_event and returns a success' do
+        before do
+          mock_updater = instance_double(Pokecord::FightUpdater)
+          expect(Pokecord::FightUpdater).
+            to receive(:new).with(user, anything, fight_type) { mock_updater }
+          expect(mock_updater).to receive(:call) { Dry::Monads::Result::Success.new(1_234) }
+        end
+
+        it 'creates a new fight_event' do
           expect { subject }.to change {
             fight_event_repo.fight_events.count
           }.from(0).to(1)
-          fight_event = fight_event_repo.fight_events.first
-          expect(fight_event.last_fought_at).to be_within(3).of(Time.now)
-          expect(fight_event.available_at).to be_within(3).of(Time.now + 60)
-          user_reload = user_repo.users.by_pk(user.id).one!
-          expect(user_reload.current_balance).to eq(11_020)
           expect(subject.value!).to eq(
-            I18n.t('fight.success', name: 'Lady Amanda', currency: '11,000')
+            I18n.t('fight.success', name: 'Lady Amanda', currency: ReadableNumber.stringify(1_234))
           )
         end
       end
 
-      context 'if user has participated in this fight type before' do
+      context 'if user has participated in this fight event before' do
         let!(:fight_event) do
           TestingFactory[
             :fight_event,
             user: user,
             fight_type: fight_type,
-            last_fought_at: (Time.now - (48 * 60 * 60)),
-            available_at: (Time.now - (24 * 60 * 60))
+            available_at: Time.now - (5 * 60)
           ]
         end
 
-        it 'updates the existing fight_event and returns a success' do
+        before do
+          mock_updater = instance_double(Pokecord::FightUpdater)
+          expect(Pokecord::FightUpdater).
+            to receive(:new).with(
+              having_attributes(id: user.id),
+              having_attributes(id: fight_event.id),
+              having_attributes(id: fight_type.id)
+            ) { mock_updater }
+          expect(mock_updater).to receive(:call) { Dry::Monads::Result::Success.new(1_234) }
+        end
+
+        it 'does not create a new fight event' do
           expect { subject }.not_to change {
             fight_event_repo.fight_events.count
           }.from(1)
-          event_reload = fight_event_repo.fight_events.by_pk(fight_event.id).one!
-          expect(event_reload.last_fought_at).to be_within(3).of(Time.now)
-          expect(event_reload.available_at).to be_within(3).of(Time.now + 60)
-          user_reload = user_repo.users.by_pk(user.id).one!
-          expect(user_reload.current_balance).to eq(11_020)
           expect(subject.value!).to eq(
-            I18n.t('fight.success', name: 'Lady Amanda', currency: '11,000')
+            I18n.t('fight.success', name: 'Lady Amanda', currency: ReadableNumber.stringify(1_234))
           )
         end
       end

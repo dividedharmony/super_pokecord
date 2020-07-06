@@ -11,6 +11,7 @@ require_relative '../../repositories/user_repo'
 require_relative '../../duration'
 require_relative '../../readable_number'
 require_relative '../fight_conditions'
+require_relative '../fight_updater'
 require_relative '../npc_name'
 
 module Pokecord
@@ -40,10 +41,7 @@ module Pokecord
         yield validate_conditions
         yield validate_time
 
-        update_user_cmd = user_repo.users.by_pk(user.id).command(:update)
-        update_user_cmd.call(current_balance: new_balance)
-        update_event_cmd = fight_event_repo.fight_events.by_pk(fight_event.id).command(:update)
-        update_event_cmd.call(last_fought_at: Time.now, available_at: next_available_at)
+        currency_award = yield Pokecord::FightUpdater.new(user, fight_event, fight_type).call
         name = Pokecord::NpcName.new(fight_type.code, user).to_s
         Success(I18n.t('fight.success', name: name, currency: ReadableNumber.stringify(currency_award)))
       end
@@ -122,24 +120,6 @@ module Pokecord
               available_at: Time.now - 1
             )
         end
-      end
-
-      def new_balance
-        user.current_balance + currency_award
-      end
-
-      def currency_award
-        @_currency_award ||= rand(fight_type.max_reward - fight_type.min_reward) +
-          fight_type.min_reward +
-          pokemon_award
-      end
-
-      def pokemon_award
-        rand(user.current_pokemon.level) * fight_type.pokemon_multiplier_reward
-      end
-
-      def next_available_at
-        Time.now + fight_type.time_delay
       end
     end
   end
