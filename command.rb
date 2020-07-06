@@ -24,8 +24,9 @@ require_relative './lib/pokecord/commands/balance'
 require_relative './lib/dnd/commands/assign_party_role'
 # admin commands
 require_relative './lib/pokecord/commands/admin/reset_balances'
-
+# embed templates
 require_relative './lib/pokecord/embed_templates/trade'
+require_relative './lib/pokecord/embed_templates/shop_landing_page'
 
 require_relative './lib/callbacks/update_trade'
 
@@ -319,14 +320,24 @@ bot.command(:balance) do |event|
   end
 end
 
+bot.command(:shop) do |event, page_num|
+  if page_num.nil?
+    embed = Pokecord::EmbedTemplates::ShopLandingPage.new.to_embed
+    event.channel.send_embed('', embed)
+    nil
+  elsif page_num =~ /\A\d+\z/
+    "Not implemented yet."
+  else
+    I18n.t('shop.argument_error')
+  end
+end
+
 %w{
   order
   hint
   pokedex
-  shop
   release
   mega
-  shop
   fav
   addfav
   removefav

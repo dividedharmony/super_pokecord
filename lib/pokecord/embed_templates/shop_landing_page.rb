@@ -3,8 +3,6 @@
 require 'discordrb'
 
 require_relative '../embed_templates'
-require_relative '../../../db/connection'
-require_relative '../../repositories/user_repo'
 
 module Pokecord
   module EmbedTemplates
