@@ -30,7 +30,7 @@ module Pokecord
         local_name_var = product_name
         products = product_repo.products.where { visible.is(true) & name.ilike(local_name_var) }
         if products.to_a.none?
-          Failure(I18n.t('buy.no_such_product', product_name: product_name))
+          Failure(I18n.t('inventory.no_such_product', product_name: product_name))
         else
           Success(products.first)
         end
