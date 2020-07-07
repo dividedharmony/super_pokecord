@@ -8,6 +8,7 @@ module Persistence
       schema(:products, infer: true) do
         associations do
           has_many :evolutions
+          has_many :inventory_items
         end
       end
 
