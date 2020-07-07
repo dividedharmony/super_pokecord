@@ -44,6 +44,7 @@ en:
     not_available_yet: "Sorry, you've already fought %{name}. Wait %{time} until you can fight them again."
     success: "You won against %{name}! You got **%{currency}** credits for winning!"
   inventory:
+    no_items: You have no items in your inventory. You can purchase some with the `p!buy [product name]` command.
     no_such_product: "Could not find a product with the name '%{product_name}'"
   name_rival:
     argument_error: Correct usage of this command is `p!namerival [name of rival]`.
