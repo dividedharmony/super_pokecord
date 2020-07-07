@@ -26,6 +26,8 @@ require 'timecop'
 require 'pry'
 require 'awesome_print'
 
+Dir[File.dirname(__FILE__) + '/support/shared_examples/*.rb'].each { |file| require file }
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
