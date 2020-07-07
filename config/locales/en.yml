@@ -51,10 +51,13 @@ en:
       description: "Certain Pokémon evolve when they come in contact with a specific item. For example, if you use a Fire Stone on a Vulpix, it will evolve into Ninetales."
     "2":
       title: Mega Evolutions
+      description: NOT IMPLEMENTED YET
     "3":
       title: XP Boosters & Rare Candies
+      description: NOT IMPLEMENTED YET
     "4":
       title: Lootboxes
+      description: NOT IMPLEMENTED YET
   trade:
     subcommand_error: Correct usage of this command is `p!trade with @[user_tag]` to begin a trade.
       Once the other party accepts using `p!accept`, you can add Pokemon to the trade with `p!trade add [catch number]`
