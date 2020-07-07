@@ -39,6 +39,10 @@ module Pokecord
           Success(product)
         end
       end
+
+      def only_visible_products
+        true
+      end
     end
   end
 end

@@ -20,40 +20,11 @@ RSpec.describe Pokecord::Commands::BaseInventoryCommand do
 
     subject { inventory_command.get_product }
 
-    context 'if product does not exist' do
-      it 'returns a failure monad' do
-        expect(subject).to be_failure
-        expect(subject.failure).to eq(I18n.t('buy.no_such_product', product_name: 'Mr Potato Head'))
-      end
-    end
-
-    context 'if product does exist' do
-      let!(:product) do
-        TestingFactory[
-          :product,
-          name: 'Mr Potato Head',
-          visible: visible,
-          price: 500
-        ]
-      end
-
-      context 'if product is not visible' do
-        let(:visible) { false }
-
-        it 'returns a failure monad' do
-          expect(subject).to be_failure
-          expect(subject.failure).to eq(I18n.t('buy.no_such_product', product_name: 'Mr Potato Head'))
-        end
-      end
-
-      context 'if product is visible' do
-        let(:visible) { true }
-
-        it 'returns the product wrapped in a Success monad' do
-          expect(subject).to be_success
-          expect(subject.value!.id).to eq(product.id)
-        end
-      end
+    it 'is an abstract class' do
+      expect { subject }.to raise_error(
+        NotImplementedError,
+        'Pokecord::Commands::BaseInventoryCommand needs to implment the #only_visible_products method'
+      )
     end
   end
 
@@ -101,16 +72,118 @@ RSpec.describe Pokecord::Commands::BaseInventoryCommand do
   end
 
   describe 'subclassing' do
-    let(:subclass) do
-      Class.new(described_class) do
-        def call
-          'stubbed value'
+    describe '#call' do
+      let(:subclass) do
+        Class.new(described_class) do
+          def call
+            'stubbed value'
+          end
+        end
+      end
+
+      subject { subclass.new('12345', 'Green Stone').call }
+
+      it { is_expected.to eq('stubbed value') }
+    end
+
+    describe '#get_product' do
+      context 'if subclass only deals with visible products' do
+        let(:subclass) do
+          Class.new(described_class) do
+            def only_visible_products
+              true
+            end
+          end
+        end
+        let(:inventory_command) { subclass.new('12345', 'Mr Potato Head') }
+
+        subject { inventory_command.get_product }
+
+        context 'if product does not exist' do
+          it 'returns a failure monad' do
+            expect(subject).to be_failure
+            expect(subject.failure).to eq(I18n.t('inventory.no_such_product', product_name: 'Mr Potato Head'))
+          end
+        end
+
+        context 'if product does exist' do
+          let!(:product) do
+            TestingFactory[
+              :product,
+              name: 'Mr Potato Head',
+              visible: visible,
+              price: 500
+            ]
+          end
+
+          context 'if product is not visible' do
+            let(:visible) { false }
+
+            it 'returns a failure monad' do
+              expect(subject).to be_failure
+              expect(subject.failure).to eq(I18n.t('inventory.no_such_product', product_name: 'Mr Potato Head'))
+            end
+          end
+
+          context 'if product is visible' do
+            let(:visible) { true }
+
+            it 'returns the product wrapped in a Success monad' do
+              expect(subject).to be_success
+              expect(subject.value!.id).to eq(product.id)
+            end
+          end
+        end
+      end
+
+      context 'if subclass deals with products of all visibility' do
+        let(:subclass) do
+          Class.new(described_class) do
+            def only_visible_products
+              false
+            end
+          end
+        end
+        let(:inventory_command) { subclass.new('12345', 'Mr Potato Head') }
+
+        subject { inventory_command.get_product }
+
+        context 'if product does not exist' do
+          it 'returns a failure monad' do
+            expect(subject).to be_failure
+            expect(subject.failure).to eq(I18n.t('inventory.no_such_product', product_name: 'Mr Potato Head'))
+          end
+        end
+
+        context 'if product does exist' do
+          let!(:product) do
+            TestingFactory[
+              :product,
+              name: 'Mr Potato Head',
+              visible: visible,
+              price: 500
+            ]
+          end
+
+          context 'if product is not visible' do
+            let(:visible) { false }
+
+            it 'returns a failure monad' do
+              expect(subject).to be_success
+              expect(subject.value!.id).to eq(product.id)
+            end
+          end
+
+          context 'if product is visible' do
+            let(:visible) { true }
+
+            it 'returns the product wrapped in a Success monad' do
+              expect(subject).to be_success
+              expect(subject.value!.id).to eq(product.id)
+            end
+          end
         end
       end
     end
-
-    subject { subclass.new('12345', 'Green Stone').call }
-
-    it { is_expected.to eq('stubbed value') }
   end
 end

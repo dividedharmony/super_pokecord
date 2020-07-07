@@ -28,7 +28,10 @@ module Pokecord
 
       def get_product
         local_name_var = product_name
-        products = product_repo.products.where { visible.is(true) & name.ilike(local_name_var) }
+        products = product_repo.products.where { name.ilike(local_name_var) }
+        if only_visible_products
+          products = products.where(visible: true)
+        end
         if products.to_a.none?
           Failure(I18n.t('inventory.no_such_product', product_name: product_name))
         else
@@ -49,6 +52,10 @@ module Pokecord
       private
 
       attr_reader :product_name, :product_repo, :inventory_repo
+
+      def only_visible_products
+        raise NotImplementedError, "#{self.class.name} needs to implment the #only_visible_products method"
+      end
     end
   end
 end
