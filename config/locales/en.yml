@@ -33,7 +33,6 @@ en:
   buy:
     amount_must_be_greater_than_zero: "Cannot purchase an amount of %{amount}. Amount must be greater than zero."
     insufficient_funds: "You don't have enough currency to purchase %{amount} of %{product_name}"
-    no_such_product: "Could not find a product with the name '%{product_name}'"
     success: "you have successfully purchased %{amount} of %{product_name}. You can see your purchased items with the `p!inventory` command."
   user_needs_to_start: It looks like you haven't started your Pokemon journey yet! Use `p!start` to pick your starting Pokemon!
   needs_a_current_pokemon: It looks like you don't have Pokemon selected. Use `p!pokemon` to view all your Pokemon and `p!select` to choose which one you want.
