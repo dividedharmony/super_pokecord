@@ -42,8 +42,19 @@ en:
     argument_error: Correct usage of this command is `p!namerival [name of rival]`.
     success: "That's right! Your best friend and greatest rival is named **%{name}**! How could I, their grandfather and legal guardian, forget?"
   shop:
+    argument_error: Correct usage of this command is `p!shop`. If you'd like to see a specific page, you can use `p!shop [page number]`.
     landing_page:
       description: See a specific page of the shop with the `p!shop [page_number]` command.
+    purchase_instructions: You can purchase a product with `p!buy [product name]`. If you'd like to purchase more than one, you can use `p!buy [product name] [amount]`.
+    "1":
+      title: Rare Stones & Evolution Items
+      description: "Certain Pokémon evolve when they come in contact with a specific item. For example, if you use a Fire Stone on a Vulpix, it will evolve into Ninetales."
+    "2":
+      title: Mega Evolutions
+    "3":
+      title: XP Boosters & Rare Candies
+    "4":
+      title: Lootboxes
   trade:
     subcommand_error: Correct usage of this command is `p!trade with @[user_tag]` to begin a trade.
       Once the other party accepts using `p!accept`, you can add Pokemon to the trade with `p!trade add [catch number]`

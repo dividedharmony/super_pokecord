@@ -18,19 +18,19 @@ module Pokecord
       def to_embed
         embed.add_field(
           name: 'Page 1 |',
-          value: 'Rare Stones & Evolution Items'
+          value: I18n.t('shop.1.title')
         )
         embed.add_field(
           name: 'Page 2 | [Not Implemented]',
-          value: 'Mega Evolutions'
+          value: I18n.t('shop.2.title')
         )
         embed.add_field(
           name: 'Page 3 | [Not Implemented]',
-          value: 'XP Boosters & Rare Candies'
+          value: I18n.t('shop.3.title')
         )
         embed.add_field(
           name: 'Page 4 | [Not Implemented]',
-          value: 'Lootboxes'
+          value: I18n.t('shop.4.title')
         )
         embed
       end
