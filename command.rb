@@ -21,6 +21,7 @@ require_relative './lib/pokecord/commands/execute_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
 require_relative './lib/pokecord/commands/balance'
 require_relative './lib/pokecord/commands/buy'
+require_relative './lib/pokecord/commands/list_inventory'
 # dnd commands
 require_relative './lib/dnd/commands/assign_party_role'
 # admin commands
@@ -29,6 +30,7 @@ require_relative './lib/pokecord/commands/admin/reset_balances'
 require_relative './lib/pokecord/embed_templates/trade'
 require_relative './lib/pokecord/embed_templates/shop_landing_page'
 require_relative './lib/pokecord/embed_templates/shop_items_page'
+require_relative './lib/pokecord/embed_templates/inventory_list'
 
 require_relative './lib/callbacks/update_trade'
 
@@ -344,6 +346,18 @@ bot.command(:buy) do |event, *args|
     product_name = args.join(' ')
     buy_result = Pokecord::Commands::Buy.new(event.user.id.to_s, product_name, amount).call
     buy_result.success? ? "#{event.user.mention}, #{buy_result.value!}" : buy_result.failure
+  end
+end
+
+bot.command(:inventory) do |event|
+  result = Pokecord::Commands::ListInventory.new(event.user.id.to_s).call
+  if result.success?
+    inventory_items = result.value!
+    embed = Pokecord::EmbedTemplates::InventoryList.new(event.user.name, inventory_items).to_embed
+    event.channel.send_embed('', embed)
+    nil
+  else
+    result.failure
   end
 end
 
