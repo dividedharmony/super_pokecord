@@ -20,6 +20,7 @@ require_relative './lib/pokecord/commands/confirm_trade'
 require_relative './lib/pokecord/commands/execute_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
 require_relative './lib/pokecord/commands/balance'
+require_relative './lib/pokecord/commands/buy'
 # dnd commands
 require_relative './lib/dnd/commands/assign_party_role'
 # admin commands
@@ -332,6 +333,17 @@ bot.command(:shop) do |event, page_num|
     nil
   else
     I18n.t('shop.argument_error')
+  end
+end
+
+bot.command(:buy) do |event, *args|
+  if args.length.zero?
+    I18n.t('buy.argument_error')
+  else
+    amount = args.last =~ /\A\d+\z/ ? args.pop.to_i : 1
+    product_name = args.join(' ')
+    buy_result = Pokecord::Commands::Buy.new(event.user.id.to_s, product_name, amount).call
+    buy_result.success? ? "#{event.user.mention}, #{buy_result.value!}" : buy_result.failure
   end
 end
 
