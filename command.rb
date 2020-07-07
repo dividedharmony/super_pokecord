@@ -27,6 +27,7 @@ require_relative './lib/pokecord/commands/admin/reset_balances'
 # embed templates
 require_relative './lib/pokecord/embed_templates/trade'
 require_relative './lib/pokecord/embed_templates/shop_landing_page'
+require_relative './lib/pokecord/embed_templates/shop_items_page'
 
 require_relative './lib/callbacks/update_trade'
 
@@ -325,8 +326,10 @@ bot.command(:shop) do |event, page_num|
     embed = Pokecord::EmbedTemplates::ShopLandingPage.new.to_embed
     event.channel.send_embed('', embed)
     nil
-  elsif page_num =~ /\A\d+\z/
-    "Not implemented yet."
+  elsif page_num.to_i.between?(1, 4)
+    embed = Pokecord::EmbedTemplates::ShopItemsPage.new(page_num.to_i).to_embed
+    event.channel.send_embed('', embed)
+    nil
   else
     I18n.t('shop.argument_error')
   end
