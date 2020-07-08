@@ -26,7 +26,10 @@ module Pokecord
       attr_reader :discord_id, :user_repo
 
       def get_user
-        user = user_repo.users.where(discord_id: discord_id).one
+        user = user_repo.
+          users.
+          where(discord_id: discord_id).
+          one
         if user.nil?
           Failure(I18n.t('user_needs_to_start'))
         else

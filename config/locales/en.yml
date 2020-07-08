@@ -74,6 +74,9 @@ en:
     subcommand_not_implemented: "The %{subcommand} subcommand has not been implemented yet. Check back later for more updates!"
     how_to_trade_description: You can add and remove Pokemon from this trade with `p!trade add [catch number]` and `p!trade remove [catch number]` repectively. Then both users can use `p!confirm` to submit the trade.
     discord_error: Unfortunately, there has been an error with Discord. Please wait and try again later.
+  use_item:
+    no_such_item: "You do not have a %{product_name} in your inventory."
+    cannot_use_item: "A %{product_name} cannot be used to evolve your current Pokemon. You can change your current pokemon with `p!select [catch number]`."
   initiate_trade:
     argument_error: Tag a user to initiate a trade! Correct usage of this command is `p!trade with @[user_tag]`.
     no_discord_id: No user tag detected. Correct usage of this command is `p!trade with @[user_tag]`.
