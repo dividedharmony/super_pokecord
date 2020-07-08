@@ -32,6 +32,7 @@ require_relative './lib/pokecord/embed_templates/trade'
 require_relative './lib/pokecord/embed_templates/shop_landing_page'
 require_relative './lib/pokecord/embed_templates/shop_items_page'
 require_relative './lib/pokecord/embed_templates/inventory_list'
+require_relative './lib/pokecord/embed_templates/spawn_list'
 
 require_relative './lib/callbacks/update_trade'
 
@@ -108,26 +109,17 @@ end
 bot.command(:pokemon) do |event, given_page_num|
   one_indexed_page_num = given_page_num&.to_i || 1
   actual_page_num = one_indexed_page_num - 1
-  list_cmd = Pokecord::Commands::ListPokemons.new(
+  list_result = Pokecord::Commands::ListPokemons.new(
     event.user.id.to_s,
     actual_page_num
-  )
-  pokemons = list_cmd.to_a
-  if pokemons.length > 0
-    event.channel.send_embed do |embed|
-      embed.color = Pokecord::EmbedTemplates::EMBED_COLOR
-      embed.title = "Pokemon caught by #{event.user.name}"
-      embed.description = pokemons.map do |spawn|
-        poke = spawn.pokemon
-        nickname_string = spawn.nickname.nil? ? '' : "nickname: #{spawn.nickname},"
-        "**#{poke.name}** ---> #{nickname_string} Level: #{spawn.level}, Pokedex number: #{poke.pokedex_number}, catch number: #{spawn.catch_number}"
-      end.join("\n")
-      embed.footer = Discordrb::Webhooks::EmbedFooter.new(
-        text: "Displaying page #{one_indexed_page_num} of #{list_cmd.total_pages}"
-      )
-    end
+  ).call
+  if list_result.success?
+    list_payload = list_result.value!
+    embed = Pokecord::EmbedTemplates::SpawnList.new(event.user.name, list_payload).to_embed
+    event.channel.send_embed('', embed)
+    nil
   else
-    "You do not have any Pokemon! Try to catch some with the `p!catch` command."
+    list_result.failure
   end
 end
 
