@@ -47,6 +47,8 @@ en:
     description: Some items, like evolution stones, are used on your current Pokemon. Others, like XP Boosters, apply their effects to you as a trainer. In either case, to use an item, use the `p!use [product name]` command.
     no_items: You have no items in your inventory. You can purchase some with the `p!buy [product name]` command.
     no_such_product: "Could not find a product with the name '%{product_name}'"
+  list_pokemon:
+    no_pokemon_found: It looks like you do not have any Pokemon! You can try to catch some with the `p!catch [Pokemon name]` command when a wild Pokemon appears.
   name_rival:
     argument_error: Correct usage of this command is `p!namerival [name of rival]`.
     success: "That's right! Your best friend and greatest rival is named **%{name}**! How could I, their grandfather and legal guardian, forget?"
