@@ -6,6 +6,14 @@ module Repositories
   class SpawnedPokemonRepo < ROM::Repository[:spawned_pokemons]
     commands :create, update: :by_pk, delete: :by_pk
 
+    def favorited_by(user)
+      by_user(user).where(favorite: true)
+    end
+
+    def by_user(user)
+      spawned_pokemons.where(user_id: user.id)
+    end
+
     # only returns last spawned pokemon
     # if that pokemon has not been caught yet
     def catchable_pokemon
