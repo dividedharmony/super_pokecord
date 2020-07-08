@@ -22,6 +22,7 @@ require_relative './lib/pokecord/commands/list_pokemons'
 require_relative './lib/pokecord/commands/balance'
 require_relative './lib/pokecord/commands/buy'
 require_relative './lib/pokecord/commands/list_inventory'
+require_relative './lib/pokecord/commands/use'
 # dnd commands
 require_relative './lib/dnd/commands/assign_party_role'
 # admin commands
@@ -361,6 +362,22 @@ bot.command(:inventory) do |event|
   end
 end
 
+bot.command(:use) do |event, *args|
+  if args.length.zero?
+    I18n.t('use_item.argument_error')
+  else
+    product_name = args.join(' ')
+    use_item_result = Pokecord::Commands::Use.new(event.user.id.to_s, product_name).call
+    if use_item_result.success?
+      evo_payload = use_item_result.value!
+      familiar_name = evo_payload.spawned_pokemon.nickname || evo_payload.evolved_from.name
+      "#{event.user.mention}! What!? #{evo_payload.evolved_from.name} is evolving! Your #{familiar_name} has evolved into **#{evo_payload.evolved_into.name}**!!"
+    else
+      use_item_result.failure
+    end
+  end
+end
+
 %w{
   order
   hint
@@ -374,7 +391,6 @@ end
   learn
   replace
   duel
-  use
   bal
   market
   p

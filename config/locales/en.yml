@@ -75,6 +75,7 @@ en:
     how_to_trade_description: You can add and remove Pokemon from this trade with `p!trade add [catch number]` and `p!trade remove [catch number]` repectively. Then both users can use `p!confirm` to submit the trade.
     discord_error: Unfortunately, there has been an error with Discord. Please wait and try again later.
   use_item:
+    argument_error: Correct usage of this command is `p!use [product name]`. Make sure you actually have that product in your inventory.
     no_such_item: "You do not have a %{product_name} in your inventory."
     cannot_use_item: "A %{product_name} cannot be used to evolve your current Pokemon. You can change your current pokemon with `p!select [catch number]`."
   initiate_trade:
