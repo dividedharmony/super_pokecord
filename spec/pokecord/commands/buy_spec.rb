@@ -57,6 +57,11 @@ RSpec.describe Pokecord::Commands::Buy do
           Db::Connection.registered_container
         )
       end
+      let(:user_repo) do
+        Repositories::UserRepo.new(
+          Db::Connection.registered_container
+        )
+      end
       let(:purchase_amount) { 3 }
 
       context 'if user already has inventory of that product' do
@@ -75,6 +80,8 @@ RSpec.describe Pokecord::Commands::Buy do
           expect { subject }.to change {
             inventory_repo.inventory_items.by_pk(inventory_item.id).one.amount
           }.from(13).to(16)
+          reloaded_user = user_repo.users.by_pk(user.id).one!
+          expect(reloaded_user.current_balance).to eq(999_500)
           reloaded_item = inventory_repo.inventory_items.by_pk(inventory_item.id).one
           expect(reloaded_item.user_id).to eq(user.id)
           expect(reloaded_item.product_id).to eq(product.id)
@@ -92,6 +99,8 @@ RSpec.describe Pokecord::Commands::Buy do
           expect { subject }.to change {
             inventory_repo.inventory_items.count
           }.from(0).to(1)
+          reloaded_user = user_repo.users.by_pk(user.id).one!
+          expect(reloaded_user.current_balance).to eq(999_500)
           inventory_item = inventory_repo.inventory_items.first
           expect(inventory_item.amount).to eq(3)
           expect(inventory_item.user_id).to eq(user.id)

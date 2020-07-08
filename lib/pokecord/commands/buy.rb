@@ -20,9 +20,12 @@ module Pokecord
         yield validate_can_purchase(user, product)
 
         inventory_item = find_or_create_inventory_item(user, product)
-        new_total = inventory_item.amount + purchase_amount
-        update_cmd = inventory_repo.inventory_items.by_pk(inventory_item.id).command(:update)
-        update_cmd.call(amount: new_total, updated_at: Time.now)
+        new_item_total = inventory_item.amount + purchase_amount
+        new_balance = user.current_balance - product.price
+        update_user_cmd = user_repo.users.by_pk(user.id).command(:update)
+        update_user_cmd.call(current_balance: new_balance)
+        update_item_cmd = inventory_repo.inventory_items.by_pk(inventory_item.id).command(:update)
+        update_item_cmd.call(amount: new_item_total, updated_at: Time.now)
         Success(I18n.t('buy.success', amount: purchase_amount, product_name: product.name))
       end
 
