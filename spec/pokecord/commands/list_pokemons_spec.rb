@@ -100,6 +100,17 @@ RSpec.describe Pokecord::Commands::ListPokemons do
           ]
         end
 
+        before do
+          # ignore excess spawns for total_pages
+          26.times do |n|
+            TestingFactory[
+              :spawned_pokemon,
+              user_id: user.id,
+              favorite: false
+            ]
+          end
+        end
+
         it 'returns a list payload wrapped in a success monad' do
           expect(subject).to be_success
           payload = subject.value!

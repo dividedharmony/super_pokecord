@@ -44,11 +44,7 @@ module Pokecord
       end
 
       def get_spawns(user)
-        spawns_by_user = only_favorites ?
-          spawn_repo.favorited_by(user) :
-          spawn_repo.by_user(user)
-
-        limited_spawns = spawns_by_user.
+        limited_spawns = spawns_by_user(user).
           combine(:pokemon).
           limit(PER_PAGE).
           offset(offset).
@@ -65,7 +61,13 @@ module Pokecord
       end
 
       def total_pages(user)
-        (spawn_repo.spawned_pokemons.where(user_id: user.id).count.to_f / PER_PAGE).ceil
+        (spawns_by_user(user).count.to_f / PER_PAGE).ceil
+      end
+
+      def spawns_by_user(user)
+        only_favorites ?
+          spawn_repo.favorited_by(user) :
+          spawn_repo.by_user(user)
       end
     end
   end
