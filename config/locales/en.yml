@@ -39,6 +39,10 @@ en:
   needs_a_current_pokemon: It looks like you don't have Pokemon selected. Use `p!pokemon` to view all your Pokemon and `p!select` to choose which one you want.
   dnd:
     assign_party_role: "You must make a character that fills the **%{primary}** role. They must also have (at level 3) _at least_ a +3 in **%{secondary}**."
+  alter_fav:
+    add_success: "You have successfully favorited your %{spawn_name}."
+    no_pokemon_found: "Could not find a Pokémon with catch number %{catch_number}. You can see what catch numbers you have with the `p!pokemon` command."
+    remove_success: "You have successfully unfavorited your %{spawn_name}."
   fav:
     no_pokemon_found: "You have no favorite Pokémon. You add a favorite Pokémon with the `p!addfav [catch number]` command."
   fight:
