@@ -132,7 +132,7 @@ bot.command(:addfav) do |event, catch_number|
       event.user.id.to_s,
       catch_number,
       true
-    )
+    ).call
     alter_result.success? ? alter_result.value! : alter_result.failure
   end
 end
@@ -145,7 +145,7 @@ bot.command(:removefav) do |event, catch_number|
       event.user.id.to_s,
       catch_number,
       false
-    )
+    ).call
     alter_result.success? ? alter_result.value! : alter_result.failure
   end
 end
