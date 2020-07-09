@@ -33,7 +33,8 @@ RSpec.describe Pokecord::Commands::ExecuteTrade do
           :spawned_pokemon,
           trade_id: trade.id,
           user_id: user_1.id,
-          catch_number: 43
+          catch_number: 43,
+          favorite: true
         ]
       end
       let!(:spawn_owned_by_2) do
@@ -41,7 +42,8 @@ RSpec.describe Pokecord::Commands::ExecuteTrade do
           :spawned_pokemon,
           trade_id: trade.id,
           user_id: user_2.id,
-          catch_number: 22
+          catch_number: 22,
+          favorite: false
         ]
       end
 
@@ -70,11 +72,13 @@ RSpec.describe Pokecord::Commands::ExecuteTrade do
         expect(reloaded_spawn_1.user_id).to eq(user_2.id)
         expect(reloaded_spawn_1.catch_number).to eq(23)
         expect(reloaded_spawn_1.trade_id).to be_nil
+        expect(reloaded_spawn_1.favorite).to be false
 
         reloaded_spawn_2 = spawn_repo.spawned_pokemons.by_pk(spawn_owned_by_2.id).one!
         expect(reloaded_spawn_2.user_id).to eq(user_1.id)
         expect(reloaded_spawn_2.catch_number).to eq(43)
         expect(reloaded_spawn_2.trade_id).to be_nil
+        expect(reloaded_spawn_2.favorite).to be false
       end
 
       context 'if user_1.current_pokemon is traded' do

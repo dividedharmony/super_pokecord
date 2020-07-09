@@ -99,7 +99,8 @@ module Pokecord
           update_spawn_cmd.call(
             user_id: new_user.id,
             catch_number: catch_max,
-            trade_id: nil
+            trade_id: nil,
+            favorite: false
           )
         end
       end
