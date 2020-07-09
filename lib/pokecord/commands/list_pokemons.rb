@@ -55,7 +55,10 @@ module Pokecord
           to_a
 
         if limited_spawns.none?
-          Failure(I18n.t('list_pokemon.no_pokemon_found'))
+          fail_message = only_favorites ?
+            I18n.t('fav.no_pokemon_found') :
+            I18n.t('list_pokemon.no_pokemon_found')
+          Failure(fail_message)
         else
           Success(limited_spawns)
         end

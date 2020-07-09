@@ -86,7 +86,7 @@ RSpec.describe Pokecord::Commands::ListPokemons do
         it 'returns a failure monad' do
           expect(subject).to be_failure
           expect(subject.failure).to eq(
-            I18n.t('list_pokemon.no_pokemon_found')
+            I18n.t('fav.no_pokemon_found')
           )
         end
       end

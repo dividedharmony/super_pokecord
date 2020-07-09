@@ -123,6 +123,24 @@ bot.command(:pokemon) do |event, given_page_num|
   end
 end
 
+bot.command(:fav) do |event, given_page_num|
+  one_indexed_page_num = given_page_num&.to_i || 1
+  actual_page_num = one_indexed_page_num - 1
+  list_result = Pokecord::Commands::ListPokemons.new(
+    event.user.id.to_s,
+    actual_page_num,
+    true
+  ).call
+  if list_result.success?
+    list_payload = list_result.value!
+    embed = Pokecord::EmbedTemplates::SpawnList.new(event.user.name, list_payload).to_embed
+    event.channel.send_embed('', embed)
+    nil
+  else
+    list_result.failure
+  end
+end
+
 # TODO allow user to select on nickname or pokemon name
 bot.command(:select) do |event, catch_number|
   if catch_number.nil? || catch_number !~ /\A\d+\z/
@@ -376,7 +394,6 @@ end
   pokedex
   release
   mega
-  fav
   addfav
   removefav
   moves
