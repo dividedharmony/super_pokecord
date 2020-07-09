@@ -19,6 +19,7 @@ require_relative './lib/pokecord/commands/modify_trade'
 require_relative './lib/pokecord/commands/confirm_trade'
 require_relative './lib/pokecord/commands/execute_trade'
 require_relative './lib/pokecord/commands/list_pokemons'
+require_relative './lib/pokecord/commands/alter_fav'
 require_relative './lib/pokecord/commands/balance'
 require_relative './lib/pokecord/commands/buy'
 require_relative './lib/pokecord/commands/list_inventory'
@@ -120,6 +121,32 @@ bot.command(:pokemon) do |event, given_page_num|
     nil
   else
     list_result.failure
+  end
+end
+
+bot.command(:addfav) do |event, catch_number|
+  if catch_number.nil? || catch_number.to_i.zero?
+    I18n.t('alter_fav.add_argument_error')
+  else
+    alter_result = Pokecord::Commands::AlterFav.new(
+      event.user.id.to_s,
+      catch_number,
+      true
+    )
+    alter_result.success? ? alter_result.value! : alter_result.failure
+  end
+end
+
+bot.command(:removefav) do |event, catch_number|
+  if catch_number.nil? || catch_number.to_i.zero?
+    I18n.t('alter_fav.remove_argument_error')
+  else
+    alter_result = Pokecord::Commands::AlterFav.new(
+      event.user.id.to_s,
+      catch_number,
+      false
+    )
+    alter_result.success? ? alter_result.value! : alter_result.failure
   end
 end
 
@@ -394,8 +421,6 @@ end
   pokedex
   release
   mega
-  addfav
-  removefav
   moves
   learn
   replace

@@ -40,8 +40,10 @@ en:
   dnd:
     assign_party_role: "You must make a character that fills the **%{primary}** role. They must also have (at level 3) _at least_ a +3 in **%{secondary}**."
   alter_fav:
+    add_argument_error: Correct usage of this command is `p!addfav [catch number]`.
     add_success: "You have successfully favorited your %{spawn_name}."
     no_pokemon_found: "Could not find a Pokémon with catch number %{catch_number}. You can see what catch numbers you have with the `p!pokemon` command."
+    remove_argument_error: Correct usage of this command is `p!removefav [catch number]`.
     remove_success: "You have successfully unfavorited your %{spawn_name}."
   fav:
     no_pokemon_found: "You have no favorite Pokémon. You add a favorite Pokémon with the `p!addfav [catch number]` command."
