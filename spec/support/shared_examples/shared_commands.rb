@@ -30,6 +30,42 @@ RSpec.shared_examples 'a user command' do
   end
 end
 
+RSpec.shared_examples 'a command that requires a user to have a current_pokemon' do
+  # let(:command) { instance of command being tested }
+
+  subject { command.call }
+
+  context 'if user does not have a current pokemon' do
+    let!(:user) do
+      TestingFactory[
+        :user,
+        discord_id: command.send(:discord_id)
+      ]
+    end
+
+    it 'returns a Failure monad' do
+      expect(subject).to be_failure
+      expect(subject.failure).to eq(I18n.t('needs_a_current_pokemon'))
+    end
+  end
+
+  context 'if user does have a current pokemon' do
+    let!(:spawn) { TestingFactory[:spawned_pokemon] }
+    let!(:user) do
+      TestingFactory[
+        :user,
+        discord_id: command.send(:discord_id),
+        current_pokemon_id: spawn.id
+      ]
+    end
+
+    it 'returns a Success monad' do
+      expect(subject).to be_success
+      expect(subject.value!.id).to eq(spawn.id)
+    end
+  end
+end
+
 RSpec.shared_examples 'an inventory command dependent on visibility' do
   # let(:command) { instance of command being tested }
 
