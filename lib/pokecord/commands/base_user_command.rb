@@ -2,8 +2,7 @@
 
 require 'dry/monads'
 
-require_relative '../../../db/connection'
-require_relative '../../repositories/user_repo'
+require_relative '../repos'
 
 module Pokecord
   module Commands
@@ -12,9 +11,7 @@ module Pokecord
 
       def initialize(discord_id)
         @discord_id = discord_id
-        @user_repo = Repositories::UserRepo.new(
-          Db::Connection.registered_container
-        )
+        @repos = Pokecord::Repos.new
       end
 
       def call
@@ -23,10 +20,10 @@ module Pokecord
 
       private
 
-      attr_reader :discord_id, :user_repo
+      attr_reader :discord_id, :repos
 
       def get_user
-        user = user_repo.
+        user = repos.
           users.
           where(discord_id: discord_id).
           one

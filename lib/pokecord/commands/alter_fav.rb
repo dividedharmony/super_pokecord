@@ -13,9 +13,6 @@ module Pokecord
       def initialize(discord_id, catch_number, fav_value)
         @catch_number = catch_number
         @fav_value = fav_value
-        @spawn_repo = Repositories::SpawnedPokemonRepo.new(
-          Db::Connection.registered_container
-        )
         super(discord_id)
       end
 
@@ -23,7 +20,7 @@ module Pokecord
         user = yield get_user
         spawn = yield get_spawn(user)
 
-        update_cmd = spawn_repo.
+        update_cmd = repos.
           spawned_pokemons.
           by_pk(spawn.id).
           command(:update)
@@ -35,10 +32,10 @@ module Pokecord
 
       private
 
-      attr_reader :catch_number, :fav_value, :spawn_repo
+      attr_reader :catch_number, :fav_value
 
       def get_spawn(user)
-        spawned_pokemon = spawn_repo.
+        spawned_pokemon = repos.
           spawned_pokemons.
           combine(:pokemon).
           where(

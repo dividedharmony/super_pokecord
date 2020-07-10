@@ -3,7 +3,6 @@
 require 'dry/monads/do'
 
 require_relative './base_user_command'
-require_relative '../../repositories/spawned_pokemon_repo'
 
 module Pokecord
   module Commands
@@ -16,9 +15,6 @@ module Pokecord
       def initialize(discord_id, page_offset, only_favorites = false)
         @page_offset = page_offset
         @only_favorites = only_favorites
-        @spawn_repo = Repositories::SpawnedPokemonRepo.new(
-          Db::Connection.registered_container
-        )
         super(discord_id)
       end
 
@@ -37,7 +33,7 @@ module Pokecord
 
       private
 
-      attr_reader :page_offset, :only_favorites, :spawn_repo
+      attr_reader :page_offset, :only_favorites
 
       def offset
         offset = page_offset * PER_PAGE
@@ -66,8 +62,8 @@ module Pokecord
 
       def spawns_by_user(user)
         only_favorites ?
-          spawn_repo.favorited_by(user) :
-          spawn_repo.by_user(user)
+          repos.spawn_repo.favorited_by(user) :
+          repos.spawn_repo.by_user(user)
       end
     end
   end

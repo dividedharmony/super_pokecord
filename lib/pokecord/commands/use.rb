@@ -3,7 +3,6 @@
 require 'dry/monads/do'
 
 require_relative './base_inventory_command'
-require_relative '../../repositories/spawned_pokemon_repo'
 require_relative '../evolve'
 
 module Pokecord
@@ -13,12 +12,7 @@ module Pokecord
 
       include Dry::Monads::Do.for(:call)
 
-      def initialize(discord_id, product_name)
-        @spawn_repo = Repositories::SpawnedPokemonRepo.new(
-          Db::Connection.registered_container
-        )
-        super(discord_id, product_name)
-      end
+      # initialize defined by parent class
 
       def call
         user = yield get_user
@@ -30,7 +24,7 @@ module Pokecord
         evolve_result = Pokecord::Evolve.new(spawn, :item, inventory_item).call
         if evolve_result.success?
           evolved_into = evolve_result.value!
-          update_cmd = inventory_repo.inventory_items.by_pk(inventory_item.id).command(:update)
+          update_cmd = repos.inventory_items.by_pk(inventory_item.id).command(:update)
           update_cmd.call(amount: (inventory_item.amount - 1), updated_at: Time.now)
           Success(
             EvolutionPayload.new(spawn, evolved_from, evolved_into)
@@ -42,8 +36,6 @@ module Pokecord
 
       private
 
-      attr_reader :spawn_repo
-
       def only_visible_products
         false
       end
@@ -52,7 +44,7 @@ module Pokecord
         if user.current_pokemon_id.nil?
           Failure(I18n.t('needs_a_current_pokemon'))
         else
-          spawned_pokemon = spawn_repo.
+          spawned_pokemon = repos.
             spawned_pokemons.
             combine(:pokemon).
             where(id: user.current_pokemon_id).
@@ -64,7 +56,7 @@ module Pokecord
       end
 
       def get_item(user, product)
-        item = inventory_repo.
+        item = repos.
           inventory_items.
           where(user_id: user.id, product_id: product.id).
           first

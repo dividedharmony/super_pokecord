@@ -20,10 +20,10 @@ module Pokecord
         inventory_item = yield get_inventory_item(user, product)
 
         new_amount = inventory_item.amount - sell_amount
-        update_item_cmd = inventory_repo.inventory_items.by_pk(inventory_item.id).command(:update)
+        update_item_cmd = repos.inventory_items.by_pk(inventory_item.id).command(:update)
         update_item_cmd.call(amount: new_amount)
         currency_award = (inventory_item.product.price / 2) * sell_amount
-        update_user_cmd = user_repo.users.by_pk(user.id).command(:update)
+        update_user_cmd = repos.users.by_pk(user.id).command(:update)
         update_user_cmd.call(current_balance: user.current_balance + currency_award)
         Success(
           I18n.t(
@@ -40,7 +40,7 @@ module Pokecord
       attr_reader :sell_amount
 
       def get_inventory_item(user, product)
-        item = inventory_repo.
+        item = repos.
           inventory_items.
           combine(:product).
           where(user_id: user.id, product_id: product.id).

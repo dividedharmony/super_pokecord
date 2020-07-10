@@ -3,7 +3,6 @@
 require 'dry/monads/do'
 
 require_relative './base_user_command'
-require_relative '../../repositories/inventory_item_repo'
 
 module Pokecord
   module Commands
@@ -12,12 +11,7 @@ module Pokecord
 
       include Dry::Monads::Do.for(:call)
 
-      def initialize(discord_id)
-        @inventory_repo = Repositories::InventoryItemRepo.new(
-          Db::Connection.registered_container
-        )
-        super(discord_id)
-      end
+      # initialize is defined by BaseUserCommand
 
       def call
         user = yield get_user
@@ -35,7 +29,7 @@ module Pokecord
       attr_reader :inventory_repo
 
       def visible_inventory
-        inventory_repo.
+        repos.
           inventory_items.
           combine(:product).
           where { amount > 0 }
