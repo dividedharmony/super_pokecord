@@ -13,7 +13,7 @@ require_relative '../repositories/fight_event_repo'
 require_relative '../repositories/inventory_item_repo'
 require_relative '../repositories/trade_repo'
 
-module CLT
+module Pokecord
   class Repos
     extend Forwardable
 
