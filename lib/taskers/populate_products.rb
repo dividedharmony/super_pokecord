@@ -122,86 +122,107 @@ module Taskers
         {
           name: "King's Rock",
           visible: false,
+          price: 60_000,
         },
         {
           name: 'Powerful Magnet',
           visible: false,
+          price: 60_000,
         },
         {
           name: 'Metal Coat',
           visible: false,
+          price: 60_000,
         },
         {
           name: 'Protector',
           visible: false,
+          price: 60_000,
         },
         {
           name: "King's Scale",
           visible: false,
+          price: 60_000,
         },
         {
           name: 'Electirizer',
           visible: false,
+          price: 80_000,
         },
         {
           name: 'Magmarizer',
           visible: false,
+          price: 80_000,
         },
         {
           name: 'Upgrade',
           visible: false,
+          price: 70_000,
         },
         {
           name: 'Dubious Disc',
           visible: false,
+          price: 70_000,
         },
         {
           name: 'Razor Fang',
           visible: false,
+          price: 60_000,
         },
         {
           name: 'Prism Scale',
           visible: false,
+          price: 60_000,
         },
         {
           name: 'Reaper Cloth',
           visible: false,
+          price: 60_000,
         },
         {
           name: 'Deep Sea Tooth',
           visible: false,
+          price: 60_000,
         },
         {
           name: 'Deep Sea Scale',
           visible: false,
+          price: 60_000,
         },
         {
           name: 'Sachet',
           visible: false,
+          price: 60_000,
         },
         {
           name: 'Whipped Dream',
           visible: false,
+          price: 50_000,
         },
         {
           name: 'Meltan Candy',
           visible: false,
+          price: 70_000,
         },
         {
           name: 'Tart Apple',
           visible: false,
+          price: 50_000,
         },
         {
           name: 'Sweet Apple',
           visible: false,
+          price: 50_000,
         },
         {
           name: 'Cracked Pot',
           visible: false,
+          price: 500,
         },
         {
           name: 'Strawberry Sweet',
           visible: false,
+          price: 50_000,
         },
       ]
     end
