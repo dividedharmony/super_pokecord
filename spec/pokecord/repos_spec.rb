@@ -53,6 +53,12 @@ RSpec.describe Pokecord::Repos do
     it { is_expected.to be_a(Repositories::InventoryItemRepo) }
   end
 
+  describe '#held_item_repo' do
+    subject { repos.held_item_repo }
+
+    it { is_expected.to be_a(Repositories::HeldItemRepo) }
+  end
+
   describe '#trade_repo' do
     subject { repos.trade_repo }
 
@@ -144,6 +150,17 @@ RSpec.describe Pokecord::Repos do
     it 'returns the inventory_items relation' do
       expect(subject.count).to eq(1)
       expect(subject.first.id).to eq(inventory_item.id)
+    end
+  end
+
+  describe '#held_items' do
+    let!(:held_item) { TestingFactory[:held_item] }
+
+    subject { repos.held_items }
+
+    it 'returns the held_items relation' do
+      expect(subject.count).to eq(1)
+      expect(subject.first.id).to eq(held_item.id)
     end
   end
 

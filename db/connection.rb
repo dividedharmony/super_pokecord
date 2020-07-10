@@ -13,6 +13,7 @@ require_relative '../lib/persistence/relations/fight_events'
 require_relative '../lib/persistence/relations/products'
 require_relative '../lib/persistence/relations/trades'
 require_relative '../lib/persistence/relations/inventory_items'
+require_relative '../lib/persistence/relations/held_items'
 
 # D&D relations
 require_relative '../lib/persistence/relations/party_roles'
@@ -39,6 +40,7 @@ module Db
             Persistence::Relations::Products,
             Persistence::Relations::Trades,
             Persistence::Relations::InventoryItems,
+            Persistence::Relations::HeldItems,
             Persistence::Relations::PartyRoles
           )
           ROM.container(configuration)

@@ -11,6 +11,7 @@ require_relative '../repositories/product_repo'
 require_relative '../repositories/fight_type_repo'
 require_relative '../repositories/fight_event_repo'
 require_relative '../repositories/inventory_item_repo'
+require_relative '../repositories/held_item_repo'
 require_relative '../repositories/trade_repo'
 
 module Pokecord
@@ -42,6 +43,9 @@ module Pokecord
       @inventory_repo = Repositories::InventoryItemRepo.new(
         Db::Connection.registered_container
       )
+      @held_item_repo = Repositories::HeldItemRepo.new(
+        Db::Connection.registered_container
+      )
       @trade_repo = Repositories::TradeRepo.new(
         Db::Connection.registered_container
       )
@@ -55,6 +59,7 @@ module Pokecord
                 :fight_type_repo,
                 :fight_event_repo,
                 :inventory_repo,
+                :held_item_repo,
                 :trade_repo
 
     def_delegators :spawn_repo, :spawned_pokemons
@@ -65,6 +70,7 @@ module Pokecord
     def_delegators :fight_type_repo, :fight_types
     def_delegators :fight_event_repo, :fight_events
     def_delegators :inventory_repo, :inventory_items
+    def_delegators :held_item_repo, :held_items
     def_delegators :trade_repo, :trades
   end
 end
