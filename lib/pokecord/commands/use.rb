@@ -16,9 +16,9 @@ module Pokecord
 
       def call
         user = yield get_user
+        spawn =yield get_current_pokemon(user)
         product = yield get_product
         inventory_item = yield get_item(user, product)
-        spawn = yield get_spawn(user)
         evolved_from = spawn.pokemon
 
         evolve_result = Pokecord::Evolve.new(spawn, :item, inventory_item).call
