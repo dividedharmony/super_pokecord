@@ -3,6 +3,9 @@
 require_relative '../../../lib/pokecord/commands/use'
 
 RSpec.describe Pokecord::Commands::Use do
+  it_behaves_like 'a command that requires a user to have a current_pokemon' do
+    let(:command) { described_class.new('12345', 'Salty Rock') }
+  end
   it_behaves_like 'an inventory command independent of visibility' do
     let(:command) { described_class.new('12345', 'Salty Rock') }
   end

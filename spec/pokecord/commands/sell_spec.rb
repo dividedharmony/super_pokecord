@@ -3,6 +3,10 @@
 require_relative '../../../lib/pokecord/commands/sell'
 
 RSpec.describe Pokecord::Commands::Sell do
+  it_behaves_like 'a user command' do
+    let(:command) { described_class.new('12345', 'XP Booster x12', 12) }
+  end
+
   it_behaves_like 'an inventory command independent of visibility' do
     let(:command) { described_class.new('12345', 'XP Booster x12', 12) }
   end

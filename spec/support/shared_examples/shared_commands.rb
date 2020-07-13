@@ -37,10 +37,11 @@ RSpec.shared_examples 'a command that requires a user to have a current_pokemon'
 
   context 'if user does not have a current pokemon' do
     let!(:user) do
-      TestingFactory[
-        :user,
-        discord_id: command.send(:discord_id)
-      ]
+      Pokecord::Repos.new.users.where(discord_id: command.send(:discord_id)).one ||
+        TestingFactory[
+          :user,
+          discord_id: command.send(:discord_id)
+        ]
     end
 
     it 'returns a Failure monad' do
@@ -59,17 +60,23 @@ RSpec.shared_examples 'a command that requires a user to have a current_pokemon'
       ]
     end
 
-    it 'returns a Success monad' do
-      expect(subject).to be_success
-      expect(subject.value!.id).to eq(spawn.id)
+    it 'does not fail the command because the product does not exist' do
+      result = command.call
+      if result.success?
+        expect(result).to be_success
+      else
+        expect(result.failure).not_to eq(
+          I18n.t(
+            'needs_a_current_pokemon',
+          )
+        )
+      end
     end
   end
 end
 
 RSpec.shared_examples 'an inventory command dependent on visibility' do
   # let(:command) { instance of command being tested }
-
-  it_behaves_like 'a user command'
 
   describe 'existence of a product' do
     let!(:user) do
@@ -135,14 +142,13 @@ end
 RSpec.shared_examples 'an inventory command independent of visibility' do
   # let(:command) { instance of command being tested }
 
-  it_behaves_like 'a user command'
-
   describe 'existence of a product' do
     let!(:user) do
-      TestingFactory[
-        :user,
-        discord_id: command.send(:discord_id)
-      ]
+      Pokecord::Repos.new.users.where(discord_id: command.send(:discord_id)).one ||
+        TestingFactory[
+          :user,
+          discord_id: command.send(:discord_id)
+        ]
     end
 
     context 'if product does not exist' do
