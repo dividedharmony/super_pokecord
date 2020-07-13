@@ -51,6 +51,9 @@ en:
     incorrect_code: Correct usage of this command is `p!fight [rando | rival | gym | elite_four | champion]`.
     not_available_yet: "Sorry, you've already fought %{name}. Wait %{time} until you can fight them again."
     success: "You won against %{name}! You got **%{currency}** credits for winning!"
+  hold:
+    insufficient_inventory: "You don't have any %{product_name} to give to your Pokémon. You can check your inventory levels with `p!inventory`."
+    success: "You have successfully given a **%{product_name}** to your %{pokemon_name}!"
   inventory:
     description: Some items, like evolution stones, are used on your current Pokemon. Others, like XP Boosters, apply their effects to you as a trainer. In either case, to use an item, use the `p!use [product name]` command.
     no_items: You have no items in your inventory. You can purchase some with the `p!buy [product name]` command.
