@@ -24,6 +24,7 @@ require_relative './lib/pokecord/commands/balance'
 require_relative './lib/pokecord/commands/buy'
 require_relative './lib/pokecord/commands/list_inventory'
 require_relative './lib/pokecord/commands/use'
+require_relative './lib/pokecord/commands/hold'
 # dnd commands
 require_relative './lib/dnd/commands/assign_party_role'
 # admin commands
@@ -412,6 +413,21 @@ bot.command(:use) do |event, *args|
     else
       use_item_result.failure
     end
+  end
+end
+
+bot.command(:hold) do |event, *args|
+  if args.length.zero?
+    I18n.t('hold.argument_error')
+  else
+    product_name = args.join(' ')
+    hold_result = Pokecord::Commands::Hold.new(
+      event.user.id.to_s,
+      product_name
+    ).call
+    hold_result.success? ?
+      "#{event.user.mention}, #{hold_result.value!}" :
+      hold_result.failure
   end
 end
 

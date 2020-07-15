@@ -52,6 +52,7 @@ en:
     not_available_yet: "Sorry, you've already fought %{name}. Wait %{time} until you can fight them again."
     success: "You won against %{name}! You got **%{currency}** credits for winning!"
   hold:
+    argument_error: Correct usage of this command is `p!hold [product name]`
     insufficient_inventory: "You don't have any %{product_name} to give to your Pokémon. You can check your inventory levels with `p!inventory`."
     success: "You have successfully given a **%{product_name}** to your %{pokemon_name}!"
   inventory:
