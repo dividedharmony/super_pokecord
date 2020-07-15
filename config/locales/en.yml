@@ -84,6 +84,9 @@ en:
     "4":
       title: Lootboxes
       description: NOT IMPLEMENTED YET
+  take:
+    pokemon_is_not_holding_an_item: Your current Pokémon is not holding an item. You can give them an item with `p!hold [pokemon name]`.
+    success: "you have successfully taken your %{product_name} from your **%{pokemon_name}**. You can see your item with `p!inventory`."
   trade:
     subcommand_error: Correct usage of this command is `p!trade with @[user_tag]` to begin a trade.
       Once the other party accepts using `p!accept`, you can add Pokemon to the trade with `p!trade add [catch number]`
