@@ -25,6 +25,7 @@ require_relative './lib/pokecord/commands/buy'
 require_relative './lib/pokecord/commands/list_inventory'
 require_relative './lib/pokecord/commands/use'
 require_relative './lib/pokecord/commands/hold'
+require_relative './lib/pokecord/commands/take'
 # dnd commands
 require_relative './lib/dnd/commands/assign_party_role'
 # admin commands
@@ -429,6 +430,13 @@ bot.command(:hold) do |event, *args|
       "#{event.user.mention}, #{hold_result.value!}" :
       hold_result.failure
   end
+end
+
+bot.command(:take) do |event|
+  take_result = Pokecord::Commands::Hold.new(event.user.id.to_s).call
+  take_result.success? ?
+    "#{event.user.mention}, #{take_result.value!}" :
+    take_result.failure
 end
 
 %w{
