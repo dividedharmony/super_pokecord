@@ -14,6 +14,7 @@ module Pokecord
         spawn = yield get_current_pokemon(user)
         product = yield get_product
         inventory_item = yield get_inventory_item(user, product)
+        yield validate_pokemon_is_not_holding(spawn)
 
         new_amount = inventory_item.amount - 1
         update_inventory_cmd = repos.
@@ -47,6 +48,24 @@ module Pokecord
           Failure(I18n.t('hold.insufficient_inventory', product_name: product.name))
         else
           Success(item)
+        end
+      end
+
+      def validate_pokemon_is_not_holding(spawn)
+        held_item = repos.
+          held_items.
+          combine(:product).
+          where(spawned_pokemon_id: spawn.id).
+          first
+        if held_item.nil?
+          Success(held_item)
+        else
+          Failure(
+            I18n.t(
+              'hold.pokemon_is_already_holding',
+              product_name: held_item.product.name
+            )
+          )
         end
       end
 

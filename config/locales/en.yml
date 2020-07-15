@@ -54,6 +54,7 @@ en:
   hold:
     argument_error: Correct usage of this command is `p!hold [product name]`
     insufficient_inventory: "You don't have any %{product_name} to give to your Pokémon. You can check your inventory levels with `p!inventory`."
+    pokemon_is_already_holding: Your Pokémon is already holding a **%{product_name}**. It cannot hold another item.
     success: "You have successfully given a **%{product_name}** to your %{pokemon_name}!"
   inventory:
     description: Some items, like evolution stones, are used on your current Pokemon. Others, like XP Boosters, apply their effects to you as a trainer. In either case, to use an item, use the `p!use [product name]` command.

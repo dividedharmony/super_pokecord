@@ -83,39 +83,65 @@ RSpec.describe Pokecord::Commands::Hold do
       context 'if inventory_item has an amount of at least one' do
         let(:amount) { 1 }
 
-        context 'if spawn has a nickname' do
-          let(:nickname) { 'Jimmy' }
+        context 'if pokemon is already holding an item' do
+          before do
+            other_product = TestingFactory[
+              :product,
+              name: 'Orange Soda'
+            ]
+            TestingFactory[
+              :held_item,
+              spawned_pokemon_id: spawn.id,
+              product_id: other_product.id
+            ]
+          end
 
-          it 'returns a message wrapped in a success monad' do
-            expect { subject }.to change {
-              Pokecord::Repos.new.inventory_items.by_pk(inventory_item.id).one.amount
-            }.from(1).to(0)
-            expect(subject).to be_success
-            expect(subject.value!).to eq(
+          it 'returns a failure monad' do
+            expect(subject).to be_failure
+            expect(subject.failure).to eq(
               I18n.t(
-                'hold.success',
-                product_name: 'Chicken Biscuits',
-                pokemon_name: 'Jimmy'
+                'hold.pokemon_is_already_holding',
+                product_name: 'Orange Soda'
               )
             )
           end
         end
 
-        context 'if spawn does not have a nickname' do
-          let(:nickname) { nil }
+        context 'if pokemon is not yet holding an item' do
+          context 'if spawn has a nickname' do
+            let(:nickname) { 'Jimmy' }
 
-          it 'returns a message wrapped in a success monad' do
-            expect { subject }.to change {
-              Pokecord::Repos.new.inventory_items.by_pk(inventory_item.id).one.amount
-            }.from(1).to(0)
-            expect(subject).to be_success
-            expect(subject.value!).to eq(
-              I18n.t(
-                'hold.success',
-                product_name: 'Chicken Biscuits',
-                pokemon_name: 'Apocalypse'
+            it 'returns a message wrapped in a success monad' do
+              expect { subject }.to change {
+                Pokecord::Repos.new.inventory_items.by_pk(inventory_item.id).one.amount
+              }.from(1).to(0)
+              expect(subject).to be_success
+              expect(subject.value!).to eq(
+                I18n.t(
+                  'hold.success',
+                  product_name: 'Chicken Biscuits',
+                  pokemon_name: 'Jimmy'
+                )
               )
-            )
+            end
+          end
+
+          context 'if spawn does not have a nickname' do
+            let(:nickname) { nil }
+
+            it 'returns a message wrapped in a success monad' do
+              expect { subject }.to change {
+                Pokecord::Repos.new.inventory_items.by_pk(inventory_item.id).one.amount
+              }.from(1).to(0)
+              expect(subject).to be_success
+              expect(subject.value!).to eq(
+                I18n.t(
+                  'hold.success',
+                  product_name: 'Chicken Biscuits',
+                  pokemon_name: 'Apocalypse'
+                )
+              )
+            end
           end
         end
       end
