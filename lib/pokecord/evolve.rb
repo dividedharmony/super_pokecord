@@ -3,8 +3,6 @@
 require 'dry/monads'
 require 'dry/monads/do'
 
-require_relative '../entities/evolution'
-
 require_relative '../../db/connection'
 require_relative '../repositories/pokemon_repo'
 require_relative '../repositories/spawned_pokemon_repo'

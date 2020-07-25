@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rom-repository'
-require_relative '../entities/evolution'
+require_relative '../entities'
 
 module Repositories
   class EvolutionRepo < ROM::Repository[:evolutions]

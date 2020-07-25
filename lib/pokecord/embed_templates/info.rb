@@ -37,15 +37,11 @@ module Pokecord
         end
       end
 
-      def stylized_pokedex_num
-        pokemon.pokedex_number.to_s.rjust(3, '0')
-      end
-
       def poke_fields
         [
           {
             name: 'Pokedex No.',
-            value: stylized_pokedex_num
+            value: pokemon.stylized_pokedex_number
           },
           {
             name: 'HP',

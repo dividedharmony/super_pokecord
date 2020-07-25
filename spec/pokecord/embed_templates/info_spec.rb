@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative '../../../lib/entities/pokemon'
 require_relative '../../../lib/pokecord/embed_templates/info'
 
 RSpec.describe Pokecord::EmbedTemplates::Info do

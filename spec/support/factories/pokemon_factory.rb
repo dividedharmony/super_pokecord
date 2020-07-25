@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-TestingFactory.define(:pokemon) do |factory|
+require_relative '../../../lib/entities'
+
+TestingFactory.define(:pokemon, struct_namespace: Entities) do |factory|
   factory.sequence(:pokedex_number) { |n| n + 1 }
   factory.sequence(:name) { |n| "Charmander ##{n}" }
   factory.base_hp { rand(200) + 10 }
