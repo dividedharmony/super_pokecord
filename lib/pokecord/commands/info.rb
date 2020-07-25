@@ -15,8 +15,14 @@ module Pokecord
         user = yield get_user
         spawn = yield get_current_pokemon(user)
         Success(
-          InfoPayload.new(spawn, spawn.pokemon)
+          InfoPayload.new(spawn, get_pokemon(spawn))
         )
+      end
+
+      private
+
+      def get_pokemon(spawned_pokemon)
+        repos.pokemons.by_pk(spawned_pokemon.pokemon_id).one!
       end
     end
   end
