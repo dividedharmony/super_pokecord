@@ -17,7 +17,7 @@ poke_channels = (ENV["POKECORD_CHANNELS"] || "").split(',')
 spawn_rate = Pokecord::SpawnRate.new(5, 15)
 previous_discord_id = nil
 
-bot.message(containing: not!("p!"), in: poke_channels) do |event|
+bot.message(in: poke_channels) do |event|
   # Step exp logic
   current_discord_id = event.user.id.to_s
   level_up_payload = Pokecord::StepCounter.new(current_discord_id).step!(previous_discord_id)
